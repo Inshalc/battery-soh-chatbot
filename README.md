@@ -4,7 +4,7 @@ It forms the foundation for a future Battery Health Chatbot that can interpret b
 
 ---
 
-# File Structure
+# 📁 File Structure
 
 ```text
 battery-soh-chatbot/
@@ -86,18 +86,18 @@ This will:
 
 This script:
 
-* Loads processed data
+1. Loads processed data
 
-* Splits into training/testing sets
+2. Splits into training/testing sets
 
-* Scales features
+3. Scales features
 
-* Trains a Linear Regression model
+4. Trains a Linear Regression model
 
-* Saves metrics, model, and plots
+5. Saves metrics, model, and plots
 
 Example console output:
-
+```
 📂 Loading data from data/processed_data.csv ...
 ✅ Data shape: (670, 36)
 🔀 Splitting into train/test ...
@@ -107,15 +107,16 @@ Example console output:
 ✅ Model trained in 0.00s
 💾 Metrics saved -> results/model_metrics.json
 ✅ Training complete! Check results/model_metrics.json and plots/model_results/
+```
 
 --- 
 
-# Step 3 – Quick Model Test
+# Step 3 – Testing the Model
 Verify the trained model and scaler work properly:
 
 ```python src/quick_test.py```
 
-Example output:
+### Example output:
 
 Model metrics:
   | r2: | 0.5081|
@@ -135,6 +136,3 @@ Model metrics:
 |MSE	|0.0021	|Mean Squared Error|
 |MAE	|0.0359	|Mean Absolute Error|
 |Train time	|0.0033 s|Very efficient|
-
-
-
