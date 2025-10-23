@@ -21,7 +21,10 @@ battery-soh-chatbot/
 │
 ├── plots/
 │   └── model_results/
+|       ├── error_distribution.png  # Histogram & Boxplot showing the distribution of prediction errors
+|       ├── metrics_simple.png      # Bar chart comparing performance metrics (R², MSE, MAE)
 │       ├── pred_vs_actual.png      # Predicted vs actual SOH scatter plot
+|       ├── r2_visual.png           # Visual gauge of R² fit quality
 │       └── residuals.png           # Error distribution histogram
 │
 ├── results/
@@ -136,3 +139,4 @@ Model metrics:
 |MSE	|0.0021	|Mean Squared Error|
 |MAE	|0.0359	|Mean Absolute Error|
 |Train time	|0.0033 s|Very efficient|
+
