@@ -110,7 +110,7 @@ Example console output:
 
 --- 
 
-# 🧪 Step 3 – Quick Model Test
+# Step 3 – Quick Model Test
 Verify the trained model and scaler work properly:
 
 ```python src/quick_test.py```
@@ -128,11 +128,12 @@ Model metrics:
 
 ---
 
-# 📊 Results Summary
+# Results Summary
 | Metric| Value| Description|
 |:------|------|------------|
 |R²	|0.5081	|50.8% variance explained|
 |MSE	|0.0021	|Mean Squared Error|
 |MAE	|0.0359	|Mean Absolute Error|
 |Train time	|0.0033 s|Very efficient|
+
 
