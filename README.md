@@ -7,7 +7,7 @@ It forms the foundation for a future Battery Health Chatbot that can interpret b
 # File Structure
 
 ```text
-designP/
+battery-soh-chatbot/
 │
 ├── data/
 │   ├── raw_data.csv                # Original dataset
@@ -135,5 +135,6 @@ Model metrics:
 |MSE	|0.0021	|Mean Squared Error|
 |MAE	|0.0359	|Mean Absolute Error|
 |Train time	|0.0033 s|Very efficient|
+
 
 
