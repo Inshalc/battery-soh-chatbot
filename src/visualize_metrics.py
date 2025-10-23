@@ -2,10 +2,10 @@ import json
 import matplotlib.pyplot as plt
 import os
 
-# Create output directory
+# creates output directory if not exist
 os.makedirs("plots/model_results", exist_ok=True)
 
-# Load metrics
+# loads metrics from JSON
 with open("results/model_metrics.json", "r") as f:
     metrics = json.load(f)
 
@@ -14,7 +14,7 @@ mse = metrics["mse"]
 mae = metrics["mae"]
 train_time = metrics["train_time_s"]
 
-# === 1. Simple Bar Chart - Main Metrics ===
+# simple bar chart of metrics
 fig, ax = plt.subplots(figsize=(8, 5))
 
 metric_names = ['R²\nScore', 'MSE', 'MAE']
@@ -23,7 +23,7 @@ colors = ['#2ecc71', '#e74c3c', '#f39c12']
 
 bars = ax.bar(metric_names, metric_values, color=colors, edgecolor='black', linewidth=1.5)
 
-# Add value labels on bars
+# adds value labels on bars 
 for bar, value in zip(bars, metric_values):
     height = bar.get_height()
     ax.text(bar.get_x() + bar.get_width()/2., height,
@@ -38,7 +38,7 @@ plt.savefig("plots/model_results/metrics_simple.png", dpi=150)
 plt.close()
 print("Saved: plots/model_results/metrics_simple.png")
 
-# === 2. R² Score Visual ===
+# R² Score Visualization
 fig, ax = plt.subplots(figsize=(10, 6))
 
 ax.barh(['R² Score'], [r2], color='#2ecc71', edgecolor='black', linewidth=2, height=0.6)
@@ -49,12 +49,12 @@ ax.set_ylim(-0.8, 0.8)
 ax.text(r2/2, 0, f'{r2:.4f}', ha='center', va='center', fontweight='bold', fontsize=16, color='white')
 ax.text(r2 + (1-r2)/2, 0, f'{1-r2:.4f}', ha='center', va='center', fontsize=14, color='gray')
 
-# Add clarity label above the bar
+# add clarity label above the bar 
 ax.text(0.5, 0.5, f'Model explains ~{r2*100:.0f}% of the variation in SOH', 
         ha='center', fontsize=12, style='italic', color='#2c3e50',
         bbox=dict(boxstyle='round,pad=0.5', facecolor='#ecf0f1', edgecolor='none', alpha=0.8))
 
-# Add interpretation below
+# add interpretation below the bar
 ax.text(0.5, -0.5, 'Moderate fit - room for improvement', 
         ha='center', fontsize=11, color='#7f8c8d', style='italic')
 
@@ -66,8 +66,8 @@ plt.savefig("plots/model_results/r2_visual.png", dpi=150)
 plt.close()
 print("Saved: plots/model_results/r2_visual.png")
 
-# === 3. Prediction Error Distribution ===
-# Load actual predictions to calculate errors
+# prediction error distribution  
+# Load actual predictions to calculate errors 
 import pandas as pd
 import joblib
 from sklearn.model_selection import train_test_split
@@ -87,10 +87,10 @@ model = joblib.load("models/model.pkl")
 X_test_s = scaler.transform(X_test)
 y_pred = model.predict(X_test_s)
 
-# Calculate errors (actual - predicted)
+# calculate errors (actual - predicted) 
 errors = y_test - y_pred
 
-# Create figure with histogram and boxplot
+# create figure with histogram and boxplot 
 fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 5))
 
 # Histogram
@@ -128,7 +128,7 @@ plt.savefig("plots/model_results/error_distribution.png", dpi=150)
 plt.close()
 print("Saved: plots/model_results/error_distribution.png")
 
-# === 4. Print Summary ===
+# prints summary to console
 print("\n" + "="*50)
 print("MODEL PERFORMANCE SUMMARY")
 print("="*50)
