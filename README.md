@@ -4,7 +4,7 @@ It forms the foundation for a future Battery Health Chatbot that can interpret b
 
 ---
 
-# 📁 File Structure
+# File Structure
 
 ```text
 designP/
@@ -62,7 +62,7 @@ source .venv/bin/activate
 
 ---
 
-# 🧹 Step 1 – Data Preprocessing
+# Step 1 – Data Preprocessing
 **Run the script that cleans the raw dataset and creates new features:**
 
 ```python data/processed_data.py```
@@ -81,7 +81,7 @@ This will:
 
 ---
 
-# 🤖 Step 2 – Train and Evaluate Model
+# Step 2 – Train and Evaluate Model
 ```python src/train_model.py```
 
 This script:
@@ -117,14 +117,14 @@ Verify the trained model and scaler work properly:
 
 Example output:
 
-📈 Model metrics:
+Model metrics:
   | r2: | 0.5081|
   |:----|:------|
   |mse: |0.0021|
   |mae: |0.0359|
   |train_time_s: |0.0033|
 
-🔮 Example Prediction (SOH): 27.60
+ Example Prediction (SOH): 27.60
 
 ---
 
@@ -135,3 +135,4 @@ Example output:
 |MSE	|0.0021	|Mean Squared Error|
 |MAE	|0.0359	|Mean Absolute Error|
 |Train time	|0.0033 s|Very efficient|
+
