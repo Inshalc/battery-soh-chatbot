@@ -36,7 +36,7 @@ battery-soh-chatbot/
 │   ├── train_model.py              # Model training and evaluation pipeline
 │   └── quick_test.py               # Quick test script to load and check trained model
 │
-└── README.md                       # (this file)
+└── README.md                       # 
 ```
 ---
 
@@ -139,4 +139,5 @@ Model metrics:
 |MSE	|0.0021	|Mean Squared Error|
 |MAE	|0.0359	|Mean Absolute Error|
 |Train time	|0.0033 s|Very efficient|
+
 
