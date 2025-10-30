@@ -30,8 +30,17 @@ const styles = StyleSheet.create({
     },
 
     input: {
+        flexGrow: 1,
+
         backgroundColor: theme.colors.surface,
         fontSize: theme.fontSize.md,
+
+        paddingVertical: theme.spacing.sm,
+        paddingHorizontal: theme.spacing.md,
+
+        borderRadius: theme.borderRadius.lg,
+        borderColor: theme.colors.accentSecondary,
+        borderWidth: 1,
     },
 });
 
