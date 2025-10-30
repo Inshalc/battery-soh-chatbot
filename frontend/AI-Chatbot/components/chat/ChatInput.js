@@ -7,6 +7,7 @@ import IconButton from '../ui/IconButton';
 const ChatInput = ({placeholder = 'Placeholder'}) => {
     return (
         <View style={styles.container}>
+            <IconButton borderColor={theme.colors.accentSecondary} name="folder" bgColor={theme.colors.surface} size={theme.fontSize.md}/>
             <TextInput 
                 placeholderTextColor={theme.colors.textSecondary} 
                 placeholder={placeholder} 
@@ -42,6 +43,11 @@ const styles = StyleSheet.create({
         borderColor: theme.colors.accentSecondary,
         borderWidth: 1,
     },
+
+    fileButton: {
+        borderWidth: 1,
+        borderColor: theme.colors.accentSecondary,
+    }
 });
 
 export default ChatInput;
