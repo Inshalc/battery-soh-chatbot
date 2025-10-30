@@ -47,6 +47,7 @@ export const globalStyles = StyleSheet.create({
     backgroundColor: theme.colors.accent,
     borderRadius: theme.borderRadius.sm,
     paddingVertical: theme.spacing.sm,
+    paddingHorizontal: theme.spacing.md,
     alignItems: 'center',
   },
 

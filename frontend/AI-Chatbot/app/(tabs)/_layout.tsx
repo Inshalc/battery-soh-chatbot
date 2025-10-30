@@ -1,3 +1,4 @@
+import { theme } from '@/themes/theme';
 import {
     Icon,
     Label,
@@ -7,9 +8,17 @@ import React from 'react';
 
 export default function TabLayout() {
     return (
-        <NativeTabs>
+        <NativeTabs
+            backgroundColor={null} // optional (for blur on iOS)
+            indicatorColor={theme.colors.accent}
+            iconColor={{ default: theme.colors.textSecondary, selected: theme.colors.accent }}
+            labelStyle={{
+            default: { color: theme.colors.textSecondary },
+            selected: { color: theme.colors.accent },
+        }}
+        >
             
-            <NativeTabs.Trigger name='index'>
+            <NativeTabs.Trigger name='index' >
                 <Label>Home</Label>
                 <Icon sf='house.fill' drawable='ic_menu_mylocation'></Icon>
             </NativeTabs.Trigger>
@@ -22,6 +31,11 @@ export default function TabLayout() {
             <NativeTabs.Trigger name='settings'>
                 <Label>Settings</Label>
                 <Icon sf='gear' drawable='settings'></Icon>
+            </NativeTabs.Trigger>
+
+            {/* REMOVE IN PRODUCTION */}
+            <NativeTabs.Trigger name='components'>
+                <Label>Components</Label>
             </NativeTabs.Trigger>
 
         </NativeTabs>

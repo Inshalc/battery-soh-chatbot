@@ -42,4 +42,19 @@ export const theme = {
         elevation: 4,
       },
     },
+
+    animation: {
+        duration: {
+          fast: 100,
+          medium: 250,
+          slow: 500,
+        },
+        scale: {
+          tap: 1.05,      // how much to grow on press
+          pulse: 1.1,     // for bounce-type animations
+        },
+        easing: {
+          default: 'ease-out',
+        },
+      },
   };
