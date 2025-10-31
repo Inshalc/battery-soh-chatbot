@@ -1,22 +1,58 @@
-import joblib
-import numpy as np
+import sys
 import json
+import pickle
+import numpy as np
+import pandas as pd
+from pathlib import Path
 
-# loads model and scaler from disk
-model = joblib.load("models/model.pkl")
-scaler = joblib.load("scalers/scaler.pkl")
+# Add the parent directory to path
+sys.path.append(str(Path(__file__).parent.parent))
 
-# load metrics 
-with open("results/model_metrics.json") as f:
-    metrics = json.load(f)
+def predict_soh(battery_data):
+    """
+    Predict SOH from battery data
+    battery_data: list of cell measurements
+    """
+    try:
+        # Load model and scaler
+        model_path = Path('models/model.pkl')
+        scaler_path = Path('scalers/scaler.pkl')
+        
+        with open(model_path, 'rb') as f:
+            model = pickle.load(f)
+        
+        with open(scaler_path, 'rb') as f:
+            scaler = pickle.load(f)
+        
+        # Convert input to numpy array and preprocess
+        features = np.array(battery_data).reshape(1, -1)
+        features_scaled = scaler.transform(features)
+        
+        # Predict
+        prediction = model.predict(features_scaled)[0]
+        
+        return {
+            'soh': float(prediction),
+            'soh_percentage': float(prediction * 100),
+            'status': 'success'
+        }
+        
+    except Exception as e:
+        return {
+            'error': str(e),
+            'status': 'error'
+        }
 
-print(" Model metrics:")
-for k, v in metrics.items():
-    print(f"  {k}: {v:.4f}")
-
-# replaces this with a real sample from your dataset if you want
-sample = np.random.rand(1, scaler.n_features_in_)  # same feature count as training
-sample_scaled = scaler.transform(sample)
-pred = model.predict(sample_scaled)
-
-print("\n Example Prediction (SOH):", pred[0])
+if __name__ == "__main__":
+    # Get data from command line arguments
+    if len(sys.argv) > 1:
+        try:
+            input_data = json.loads(sys.argv[1])
+            result = predict_soh(input_data)
+            print(json.dumps(result))
+        except Exception as e:
+            error_result = {
+                'error': f'Prediction failed: {str(e)}',
+                'status': 'error'
+            }
+            print(json.dumps(error_result))
