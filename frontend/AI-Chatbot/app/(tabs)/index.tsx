@@ -1,15 +1,17 @@
+import React, { useState } from 'react';
 import { Text, View } from "react-native";
+import Screen from '@/components/layout/Screen';
+import ProfileHeader from "@/components/layout/ProfileHeader";
+import GreetingCard from "@/components/ui/GreetingCard";
 
 export default function Index() {
+  // fro header height padding
+  const [headerHeight, setHeaderHeight] = useState(0);
+
   return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <Text>Edit app/index.tsx to edit this screen.</Text>
-    </View>
+    <Screen avoidTopInset={true} style={{paddingTop: headerHeight}}>
+      <ProfileHeader onHeightChange={setHeaderHeight} />
+      <GreetingCard />
+    </Screen>
   );
 }

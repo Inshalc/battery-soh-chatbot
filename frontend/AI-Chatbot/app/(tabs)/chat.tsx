@@ -1,3 +1,4 @@
+import React, { useState } from 'react';
 import ChatInput from '@/components/chat/ChatInput.js';
 import ProfileHeader from '@/components/layout/ProfileHeader';
 import Screen from '@/components/layout/Screen';
@@ -13,9 +14,12 @@ export default function Chat() {
   const insets = useSafeAreaInsets();
   const bottomOffset = tabBarHeight + insets.bottom;
 
+  // fro header height padding
+  const [headerHeight, setHeaderHeight] = useState(0);
+
   return (
-    <Screen avoidTopInset={true}>
-      <ProfileHeader />
+    <Screen avoidTopInset={true} style={{paddingTop: headerHeight}}>
+      <ProfileHeader onHeightChange={setHeaderHeight} />
 
       <View>
         <Text></Text>

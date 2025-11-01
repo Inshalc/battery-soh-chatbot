@@ -5,12 +5,20 @@ import { StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import IconButton from '../ui/IconButton';
 
-const ProfileHeader = () => {
+const ProfileHeader = ({ onHeightChange }) => {
     const insets = useSafeAreaInsets();
 
     return (
-        <View style={[styles.positioningContainer]}>
-            <View style={[styles.container, {paddingTop: insets.top}]}>
+        <View 
+            onLayout={(event) => {
+                const { height } = event.nativeEvent.layout;
+                if (onHeightChange) {
+                    onHeightChange(height);
+                }
+            }}
+            
+            style={[styles.positioningContainer]}>
+            <View style={[styles.container, {paddingTop: 0}]}>
 
                 <Text style={globalStyles.title}>Battery SOH Chatbot</Text>
                 <View style={styles.iconContainer}>
