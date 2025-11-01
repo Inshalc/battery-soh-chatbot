@@ -14,7 +14,7 @@ export default function Chat() {
   const bottomOffset = tabBarHeight + insets.bottom;
 
   return (
-    <Screen>
+    <Screen avoidTopInset={true}>
       <ProfileHeader />
 
       <View>

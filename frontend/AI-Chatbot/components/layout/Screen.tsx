@@ -8,18 +8,23 @@ interface ScreenProps {
   children: ReactNode;
   padded?: boolean;
   style?: StyleProp<ViewStyle>;
+  avoidTopInset?: boolean;
 }
 
-export default function Screen({ children, padded = true, style }: ScreenProps) {
+export default function Screen({ children, padded = true, style, avoidTopInset = false }: ScreenProps) {
   const insets = useSafeAreaInsets();
   const gutterH = 20; // your global horizontal padding
 
   return (
-    <SafeAreaView style={[styles.root, { paddingTop: insets.top }]}>
+    <SafeAreaView style={[styles.root, !avoidTopInset && { paddingTop: insets.top }]}>
       <View
         style={[
           styles.body,
-          padded && { paddingHorizontal: gutterH, paddingVertical: theme.spacing.sm },
+          padded && {
+            paddingHorizontal: gutterH,
+            paddingTop: avoidTopInset ? 0 : theme.spacing.sm,
+            paddingBottom: theme.spacing.sm,
+          },
           style,
         ]}
       >

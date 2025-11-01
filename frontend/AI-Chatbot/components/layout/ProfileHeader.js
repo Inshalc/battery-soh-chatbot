@@ -9,14 +9,14 @@ const ProfileHeader = () => {
     const insets = useSafeAreaInsets();
 
     return (
-        <View style={[styles.positioningContainer, {top: insets.top}]}>
-            <View style={styles.container}>
+        <View style={[styles.positioningContainer]}>
+            <View style={[styles.container, {paddingTop: insets.top}]}>
 
-            <Text style={globalStyles.title}>Battery SOH Chatbot</Text>
-            <View style={styles.iconContainer}>
-                <IconButton name="person"/>
-                <IconButton name="log-out"/>
-            </View>
+                <Text style={globalStyles.title}>Battery SOH Chatbot</Text>
+                <View style={styles.iconContainer}>
+                    <IconButton name="person"/>
+                    <IconButton name="log-out"/>
+                </View>
 
             </View>
         </View>
@@ -26,7 +26,11 @@ const ProfileHeader = () => {
 const styles = StyleSheet.create({
     positioningContainer: {
         position: 'absolute',
-        left: 0, right: 0, 
+        left: 0, 
+        right: 0, 
+        top: 0,
+        zIndex: 10,
+
     },
 
     container: {
@@ -40,6 +44,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'transparent',
 
         paddingBottom: theme.spacing.sm,
+        paddingHorizontal: 20,
     },
     
     iconContainer: {
