@@ -4,6 +4,7 @@ import Screen from '@/components/layout/Screen';
 import ProfileHeader from "@/components/layout/ProfileHeader";
 import GreetingCard from "@/components/ui/GreetingCard";
 import FilterSection from '@/components/ui/FilterSection';
+import { theme } from '@/themes/theme';
 
 export default function Index() {
   // fro header height padding
@@ -26,7 +27,15 @@ export default function Index() {
   ];
 
   return (
-    <Screen avoidTopInset={true} style={{paddingTop: headerHeight}}>
+    <Screen 
+      avoidTopInset={true} 
+      style={
+        [
+          {paddingTop: headerHeight + theme.spacing.lg},
+          {gap: theme.spacing.lg}
+        ]
+      }
+    >
       <ProfileHeader onHeightChange={setHeaderHeight} title="Battery SOH Chatbot"/>
       <GreetingCard />
 
