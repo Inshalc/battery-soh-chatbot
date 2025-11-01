@@ -27,7 +27,7 @@ export default function Index() {
 
   return (
     <Screen avoidTopInset={true} style={{paddingTop: headerHeight}}>
-      <ProfileHeader onHeightChange={setHeaderHeight} />
+      <ProfileHeader onHeightChange={setHeaderHeight} title="Battery SOH Chatbot"/>
       <GreetingCard />
 
       <FilterSection header='Model Output' categories={categories} cards={cards} />

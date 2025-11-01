@@ -46,7 +46,7 @@ export default function Components() {
             // alignItems: 'center',
         }}
       >
-        <ProfileHeader onHeightChange={setHeaderHeight} />
+        <ProfileHeader onHeightChange={setHeaderHeight} title='Components'/>
 
         <GradientButton text="Gradient Button"></GradientButton>
         <ChatBubble text="This is a User Message" isUser={true}/>

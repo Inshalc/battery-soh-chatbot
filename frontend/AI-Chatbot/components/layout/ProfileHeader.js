@@ -4,8 +4,9 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import IconButton from '../ui/IconButton';
+import PropTypes from 'prop-types';
 
-const ProfileHeader = ({ onHeightChange }) => {
+const ProfileHeader = ({ onHeightChange, title = '[Text]' }) => {
     const insets = useSafeAreaInsets();
 
     return (
@@ -20,7 +21,7 @@ const ProfileHeader = ({ onHeightChange }) => {
             style={[styles.positioningContainer]}>
             <View style={[styles.container, {paddingTop: 0}]}>
 
-                <Text style={globalStyles.title}>Battery SOH Chatbot</Text>
+                <Text style={globalStyles.title}>{title}</Text>
                 <View style={styles.iconContainer}>
                     <IconButton name="person"/>
                     <IconButton name="log-out"/>
@@ -30,6 +31,10 @@ const ProfileHeader = ({ onHeightChange }) => {
         </View>
     );
 }
+
+ProfileHeader.propTypes = {
+    title: PropTypes.string,
+};
 
 const styles = StyleSheet.create({
     positioningContainer: {

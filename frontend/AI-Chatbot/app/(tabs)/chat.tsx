@@ -19,7 +19,7 @@ export default function Chat() {
 
   return (
     <Screen avoidTopInset={true} style={{paddingTop: headerHeight}}>
-      <ProfileHeader onHeightChange={setHeaderHeight} />
+      <ProfileHeader onHeightChange={setHeaderHeight} title="Chatbot"/>
 
       <View>
         <Text></Text>
