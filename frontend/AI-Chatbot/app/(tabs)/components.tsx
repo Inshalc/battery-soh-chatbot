@@ -11,7 +11,7 @@ import IconButton from "@/components/ui/IconButton";
 import { theme } from "@/themes/theme";
 import { View } from "react-native";
 import FilterChips from '@/components/ui/FilterChips';
-import OutputInterface from'@/components/ui/OutputInterface.js';
+import FilterSection from'@/components/ui/FilterSection.js';
 
 export default function Components() {
   // fro header height padding
@@ -49,7 +49,7 @@ export default function Components() {
 
         <FilterChips categories={categories}/>
 
-        <OutputInterface />
+        <FilterSection />
 
       </View>
     </Screen>

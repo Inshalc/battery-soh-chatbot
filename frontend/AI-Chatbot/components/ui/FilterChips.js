@@ -54,8 +54,6 @@ const chipStyles = StyleSheet.create({
 const FilterChips = ({header = '[Header]', categories}) => {
     const [selectedId, setSelectedId] = useState(1);
 
-    
-
     return (
         <View style={filterChipsStyles.container}>
             <Text style={globalStyles.title}>{header}</Text>

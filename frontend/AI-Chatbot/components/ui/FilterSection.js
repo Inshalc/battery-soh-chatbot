@@ -1,7 +1,8 @@
 import React from 'react';
 import FilterChips from './FilterChips.js';
+import FilterCard from './FilterCard.js';
 
-const OutputInterface = () => {
+const FilterSection = () => {
     const outputs = [
         { id: 1, label: 'R²' },
         { id: 2, label: 'MSE' },
@@ -10,8 +11,12 @@ const OutputInterface = () => {
     ];
     
     return (
-        <FilterChips header="Output: " categories={outputs} />
+        <>
+            <FilterChips header="Output: " categories={outputs} />
+
+            <FilterCard />
+        </>
     );
 };
 
-export default OutputInterface;
+export default FilterSection;
