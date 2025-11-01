@@ -23,7 +23,15 @@ const styles = StyleSheet.create({
         display: 'flex',
         gap: theme.spacing.md,
 
-        alignSelf: 'flex-start',
+        alignSelf: 'stretch',
+
+        maxWidth: 200,
+
+        // get rid of shadow from globalStyles
+        shadowColor: 'transparent',
+        shadowOpacity: 0,
+        shadowRadius: 0,
+        elevation: 0, // Android
     },
 
     mainText: {
@@ -33,6 +41,8 @@ const styles = StyleSheet.create({
 
     subText: {
         color: theme.colors.textSecondary,
+        flexShrink: 1,
+        // maxWidth: '70%',
     }
 });
 

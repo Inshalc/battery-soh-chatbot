@@ -18,11 +18,21 @@ export default function Components() {
   const [headerHeight, setHeaderHeight] = useState(0);
 
   // for filterchips
+  // for chips
   const categories = [
-    { id: 1, label: 'First Item' },
-    { id: 2, label: 'Second Item' },
-    { id: 3, label: 'Third Item' },
-    { id: 4, label: 'Fourth Item' },
+    { id: 0, label: 'All'},
+    { id: 1, label: 'R²' },
+    { id: 2, label: 'MSE' },
+    { id: 3, label: 'MAE' },
+    { id: 4, label: 'Training Time' },
+  ];
+
+  // for cards
+  const cards = [
+    {categoryId: 1, mainText: '1', subText: '1'},
+    {categoryId: 2, mainText: '2', subText: '2'},
+    {categoryId: 3, mainText: '3', subText: '3'},
+    {categoryId: 4, mainText: '4', subText: '4'},
   ];
 
   return (
@@ -45,11 +55,8 @@ export default function Components() {
         <ChatInput />
         
         <GreetingCard />
-        
 
-        <FilterChips categories={categories}/>
-
-        <FilterSection />
+        <FilterSection cards={cards} categories={categories}/>
 
       </View>
     </Screen>

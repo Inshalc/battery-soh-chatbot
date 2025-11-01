@@ -17,7 +17,10 @@ const Chip = memo(
                 onPress={onPress}
             >
                 <Text
-                    style={{color: selected ? theme.colors.textPrimary : theme.colors.textSecondary}}
+                    style={[
+                        {color: selected ? theme.colors.textPrimary : theme.colors.textSecondary},
+                        {fontWeight: selected ? 'bold' : 'regular'}
+                    ]}
                 >
                     {label}
                 </Text>
@@ -26,7 +29,7 @@ const Chip = memo(
     }
 );
 
-Chip.PropTypes = {
+Chip.propTypes = {
     label: PropTypes.string,
     selected: PropTypes.bool,
     onPress: PropTypes.func,
@@ -51,8 +54,7 @@ const chipStyles = StyleSheet.create({
     },
 });
 
-const FilterChips = ({header = '[Header]', categories}) => {
-    const [selectedId, setSelectedId] = useState(1);
+const FilterChips = ({ header = '[Header]', categories, selectedId, onChange }) => {
 
     return (
         <View style={filterChipsStyles.container}>
@@ -69,7 +71,7 @@ const FilterChips = ({header = '[Header]', categories}) => {
                             key={item.id} 
                             label={item.label} 
                             selected={item.id === selectedId}
-                            onPress={() => {setSelectedId(item.id)}}
+                            onPress={() => onChange && onChange(item.id)}
                         />
                     ))
                 }
@@ -78,9 +80,11 @@ const FilterChips = ({header = '[Header]', categories}) => {
     );
 };
 
-FilterChips.PropTypes = {
+FilterChips.propTypes = {
     header: PropTypes.string,
     categories: PropTypes.array,
+    selectedId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    onChange: PropTypes.func,
 };
 
 const filterChipsStyles = StyleSheet.create({
