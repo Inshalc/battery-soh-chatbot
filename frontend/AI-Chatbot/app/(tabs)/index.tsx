@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Text, View, StyleSheet } from "react-native";
+import { Text, View, StyleSheet, ScrollView } from "react-native";
 import Screen from '@/components/layout/Screen';
 import ProfileHeader from "@/components/layout/ProfileHeader";
 import GreetingCard from "@/components/ui/GreetingCard";
@@ -44,22 +44,35 @@ export default function Index() {
   return (
     <Screen 
       avoidTopInset={true} 
-      style={
-        [
-          {paddingTop: headerHeight + theme.spacing.lg},
-          {gap: theme.spacing.lg}
-        ]
-      }
     >
       <ProfileHeader onHeightChange={setHeaderHeight} title="Battery SOH Chatbot"/>
-      <GreetingCard />
 
-      <View>
-        <Text style={globalStyles.title}>Have Questions?</Text>
-        <AskAISection header="Chatbot.ai" messages={messages} chips={chips} />
-      </View>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
 
-      <FilterSection header='Model Output' categories={categories} cards={cards} />
+        contentContainerStyle={
+          [
+            {paddingTop: headerHeight + theme.spacing.lg},
+            {paddingBottom: theme.spacing.lg},
+            {gap: theme.spacing.lg}
+          ]
+        }
+      >
+        <GreetingCard />
+
+        <View style={styles.askAIContainer}>
+          <Text style={globalStyles.title}>Have Questions?</Text>
+          <AskAISection header="Chatbot.ai" messages={messages} chips={chips} />
+        </View>
+
+        <FilterSection header='Model Output' categories={categories} cards={cards} />
+      </ScrollView>
     </Screen>
   );
 }
+
+const styles = {
+  askAIContainer: {
+    gap: theme.spacing.sm,
+  },
+};

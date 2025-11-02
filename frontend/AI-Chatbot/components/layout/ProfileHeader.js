@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1,
         borderBottomColor: theme.colors.border,
 
-        backgroundColor: 'transparent',
+        backgroundColor: theme.colors.background,
 
         paddingBottom: theme.spacing.sm,
         paddingHorizontal: 20,
