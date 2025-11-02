@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
-import { Text, View } from "react-native";
+import { Text, View, StyleSheet } from "react-native";
 import Screen from '@/components/layout/Screen';
 import ProfileHeader from "@/components/layout/ProfileHeader";
 import GreetingCard from "@/components/ui/GreetingCard";
 import FilterSection from '@/components/ui/FilterSection';
 import { theme } from '@/themes/theme';
+import AskAISection from '@/components/ui/AskAISection';
+import { globalStyles } from '@/themes/globalStyles';
 
 export default function Index() {
   // fro header height padding
@@ -26,6 +28,19 @@ export default function Index() {
     {categoryId: 4, mainText: 'Training Time: 0.0033 s', subText: 'Lots of text abt what this value means and how it works yk'},
   ];
 
+  // fro ask ai section, change messages fro messages, change cips for input chips, 
+  const messages = [
+    {id: 1, isUser: true, text: "What's my Battery SOH?"},
+    {id: 2, isUser: false, text: "idk broski"},
+  ];
+
+  const chips = [
+    {id: 1, text: "How are you"},
+    {id: 2, text: "byebye"},
+    {id: 3, text: "byebye"},
+    {id: 4, text: "byebye"},
+  ];
+
   return (
     <Screen 
       avoidTopInset={true} 
@@ -38,6 +53,11 @@ export default function Index() {
     >
       <ProfileHeader onHeightChange={setHeaderHeight} title="Battery SOH Chatbot"/>
       <GreetingCard />
+
+      <View>
+        <Text style={globalStyles.title}>Have Questions?</Text>
+        <AskAISection header="Chatbot.ai" messages={messages} chips={chips} />
+      </View>
 
       <FilterSection header='Model Output' categories={categories} cards={cards} />
     </Screen>

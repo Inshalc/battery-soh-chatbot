@@ -10,7 +10,7 @@ const Chip = memo(
         return (
             <Pressable
                 style={[
-                    chipStyles.chip,
+                    globalStyles.chip,
                     selected ? chipStyles.selected : chipStyles.unSelected
                 ]}
 
@@ -36,15 +36,6 @@ Chip.propTypes = {
 };
 
 const chipStyles = StyleSheet.create({
-    chip: {
-        paddingHorizontal: theme.spacing.sm,
-        paddingVertical: theme.spacing.xs,
-
-        borderRadius: theme.borderRadius.full,
-
-        alignSelf: 'flex-start', // make it only take as much space as needed
-    },
-
     selected: {
         backgroundColor: theme.colors.accent,
     },

@@ -9,9 +9,10 @@ import GradientButton from "@/components/ui/GradientButton";
 import GreetingCard from "@/components/ui/GreetingCard.js";
 import IconButton from "@/components/ui/IconButton";
 import { theme } from "@/themes/theme";
-import { View } from "react-native";
+import { View, ScrollView } from "react-native";
 import FilterChips from '@/components/ui/FilterChips';
 import FilterSection from'@/components/ui/FilterSection.js';
+import AskAISection from '@/components/ui/AskAISection.js';
 
 export default function Components() {
   // fro header height padding
@@ -35,12 +36,25 @@ export default function Components() {
     {categoryId: 4, mainText: '4', subText: '4'},
   ];
 
+  // fro ask ai section
+  const messages = [
+    {id: 1, isUser: true, text: "What's my Battery SOH?"},
+    {id: 2, isUser: false, text: "idk broski"},
+  ];
+
+  const chips = [
+    {id: 1, text: "How are you"},
+    {id: 2, text: "byebye"},
+    {id: 3, text: "byebye"},
+    {id: 4, text: "byebye"},
+  ];
+
   return (
     
 
     <Screen avoidTopInset={true} style={{paddingTop: headerHeight}}>
-      <View
-        style={{
+      <ScrollView
+        contentContainerStyle={{
             flex: 1,
             justifyContent: 'center',
             // alignItems: 'center',
@@ -58,7 +72,9 @@ export default function Components() {
 
         <FilterSection cards={cards} categories={categories}/>
 
-      </View>
+        <AskAISection messages={messages} chips={chips}/>
+
+      </ScrollView>
     </Screen>
     
     
