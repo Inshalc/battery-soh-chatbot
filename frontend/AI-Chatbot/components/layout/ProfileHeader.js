@@ -5,9 +5,12 @@ import { StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import IconButton from '../ui/IconButton';
 import PropTypes from 'prop-types';
+import { useRouter } from 'expo-router';
 
 const ProfileHeader = ({ onHeightChange, title = '[Text]' }) => {
     const insets = useSafeAreaInsets();
+
+    const router = useRouter();
 
     return (
         <View 
@@ -23,8 +26,22 @@ const ProfileHeader = ({ onHeightChange, title = '[Text]' }) => {
 
                 <Text style={globalStyles.title}>{title}</Text>
                 <View style={styles.iconContainer}>
-                    <IconButton name="person"/>
-                    <IconButton name="log-out"/>
+                    <IconButton 
+                        name="person" 
+                        bgColor='transparent' 
+                        size={theme.fontSize.lg} 
+                        handlePress={() => {
+                            router.push('/(tabs)/settings');
+                        }}
+                    />
+                    <IconButton 
+                        name="log-out" 
+                        bgColor='transparent' 
+                        size={theme.fontSize.lg}
+                        handlePress={() => {
+                            router.push('/landing');
+                        }}
+                    />
                 </View>
 
             </View>
