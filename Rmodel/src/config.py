@@ -1,9 +1,4 @@
-FEATURE_COLS = [
-    'Pack_SOH_mean',
-    'Pack_SOH_median',
-    'Pack_SOH_std',
-    'Pack_SOH_min',
-    'Pack_SOH_max',
-    'Pack_SOH_skew'
-]
+# Use U1-U21 voltage columns as features
+FEATURE_COLS = [f'U{i}' for i in range(1, 22)]
 TARGET_COL = 'SOH'
+HEALTH_THRESHOLD = 0.6  # SOH < 0.6 = Problem, SOH >= 0.6 = Healthy
