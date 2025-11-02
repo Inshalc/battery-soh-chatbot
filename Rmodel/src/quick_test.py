@@ -1,28 +1,25 @@
 import sys
 import json
-import pickle
+import joblib
 import numpy as np
 import pandas as pd
 from pathlib import Path
 
-# Add the parent directory to path
-sys.path.append(str(Path(__file__).parent.parent))
-
 def predict_soh(battery_data):
     """
     Predict SOH from battery data
-    battery_data: list of cell measurements
+    battery_data: list of 6 aggregated features
     """
     try:
+        # Get the correct base directory (Rmodel folder, not Rmodel/src)
+        BASE_DIR = Path(__file__).parent.parent
+        
+        model_path = BASE_DIR / 'models/model.pkl'
+        scaler_path = BASE_DIR / 'scalers/scaler.pkl'
+        
         # Load model and scaler
-        model_path = Path('models/model.pkl')
-        scaler_path = Path('scalers/scaler.pkl')
-        
-        with open(model_path, 'rb') as f:
-            model = pickle.load(f)
-        
-        with open(scaler_path, 'rb') as f:
-            scaler = pickle.load(f)
+        model = joblib.load(model_path)
+        scaler = joblib.load(scaler_path)
         
         # Convert input to numpy array and preprocess
         features = np.array(battery_data).reshape(1, -1)
@@ -30,6 +27,7 @@ def predict_soh(battery_data):
         
         # Predict
         prediction = model.predict(features_scaled)[0]
+        prediction = max(0.0, min(1.0, prediction))  # Clip to valid range
         
         return {
             'soh': float(prediction),
@@ -44,11 +42,11 @@ def predict_soh(battery_data):
         }
 
 if __name__ == "__main__":
-    # Get data from command line arguments
     if len(sys.argv) > 1:
         try:
             input_data = json.loads(sys.argv[1])
             result = predict_soh(input_data)
+            # ONLY OUTPUT JSON, no debug text or emojis
             print(json.dumps(result))
         except Exception as e:
             error_result = {

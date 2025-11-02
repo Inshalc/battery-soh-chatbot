@@ -1,5 +1,4 @@
 const express = require('express');
-const axios = require('axios');
 const router = express.Router();
 
 /**
@@ -17,20 +16,22 @@ router.post('/message', async (req, res) => {
       });
     }
 
-    // Check if it's a battery health query
     const lowerMessage = message.toLowerCase();
-    const isHealthQuery = lowerMessage.includes('health') || 
-                         lowerMessage.includes('soh') || 
-                         lowerMessage.includes('status') ||
-                         lowerMessage.includes('check battery') ||
-                         lowerMessage.match(/(how is|what is).*(battery|health)/);
 
-    // Handle battery health queries
-    if (isHealthQuery) {
+    // Check if it's a CURRENT battery status query (needs SOH data)
+    const isCurrentStatusQuery = 
+      lowerMessage.includes('check') || 
+      lowerMessage.includes('status') ||
+      lowerMessage.includes('my battery') ||
+      lowerMessage.match(/how is.*battery/) ||
+      lowerMessage.match(/battery.*status/) ||
+      (lowerMessage.includes('health') && lowerMessage.includes('my'));
+
+    // Handle CURRENT battery status queries
+    if (isCurrentStatusQuery) {
       if (batterySOH !== undefined && batterySOH !== null) {
         const status = batterySOH >= 0.6 ? 'healthy' : 'has a problem';
-        const healthMessage = `The battery State of Health (SOH) is ${(batterySOH * 100).toFixed(1)}%. ` +
-                             `Based on the threshold of 60%, the battery ${status}.`;
+        const healthMessage = `The battery State of Health (SOH) is ${(batterySOH * 100).toFixed(1)}%. Based on the threshold of 60%, the battery ${status}.`;
         
         return res.json({
           response: healthMessage,
@@ -46,27 +47,27 @@ router.post('/message', async (req, res) => {
       }
     }
 
-    // Check if it's a general battery question (not requiring SOH)
-    const isBatteryQuestion = lowerMessage.includes('battery') || 
-                             lowerMessage.includes('charge') ||
-                             lowerMessage.includes('lifespan') ||
-                             lowerMessage.includes('recycl') ||
-                             lowerMessage.includes('health') ||
-                             lowerMessage.includes('maintain') ||
-                             lowerMessage.includes('extend') ||
-                             lowerMessage.includes('keep') ||
-                             lowerMessage.includes('tips');
+    // For all other battery-related questions, use our knowledge base
+    const isBatteryQuestion = 
+      lowerMessage.includes('battery') || 
+      lowerMessage.includes('soh') ||
+      lowerMessage.includes('lithium') ||
+      lowerMessage.includes('charge') ||
+      lowerMessage.includes('recycl') ||
+      lowerMessage.includes('health') ||
+      lowerMessage.includes('maintain') ||
+      lowerMessage.includes('extend') ||
+      lowerMessage.includes('lifespan');
 
-    // For general battery questions, use OpenAI
     if (isBatteryQuestion) {
-      const openaiResponse = await getOpenAIResponse(message);
+      const batteryResponse = getBatteryResponse(message);
       return res.json({
-        response: openaiResponse,
+        response: batteryResponse,
         type: 'battery_info'
       });
     }
 
-    // For non-battery questions, provide a focused response
+    // For non-battery questions
     const focusedResponse = "I'm specialized in battery technology and health. I can help you with questions about battery State of Health (SOH), maintenance, recycling, or extending battery lifespan. What would you like to know about batteries?";
     
     res.json({
@@ -83,62 +84,39 @@ router.post('/message', async (req, res) => {
   }
 });
 
-/**
- * Get response from OpenAI API
- */
-async function getOpenAIResponse(userMessage) {
-  try {
-    const response = await axios.post('https://api.openai.com/v1/chat/completions', {
-      model: "gpt-3.5-turbo",
-      messages: [
-        {
-          role: "system",
-          content: `You are a helpful battery technology expert. Provide accurate, concise information about:
-          - Battery health and State of Health (SOH)
-          - Battery maintenance and best practices
-          - Extending battery lifespan
-          - Battery recycling and sustainability
-          - Battery safety tips
-          - Lithium-ion battery technology
-          
-          Keep responses practical and focused (2-3 paragraphs maximum). 
-          If asked about non-battery topics, politely redirect to battery-related questions.`
-        },
-        {
-          role: "user",
-          content: userMessage
-        }
-      ],
-      max_tokens: 350,
-      temperature: 0.7
-    }, {
-      headers: {
-        'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
-        'Content-Type': 'application/json'
-      }
-    });
-
-    return response.data.choices[0].message.content;
-
-  } catch (error) {
-    console.error('OpenAI API error:', error.response?.data || error.message);
+// Comprehensive battery knowledge base
+function getBatteryResponse(message) {
+  const lowerMessage = message.toLowerCase();
+  
+  const knowledgeBase = {
+    'state of health': 'State of Health (SOH) measures a battery\'s current condition compared to its original state. It indicates capacity retention - a 100% SOH means like-new performance, while lower values show degradation. SOH considers factors like capacity loss, internal resistance, and charge retention ability.',
     
-    // Fallback responses if OpenAI fails
-    const fallbackResponses = {
-      'how to keep a battery healthy': 'To keep batteries healthy: avoid extreme temperatures, prevent deep discharges, use manufacturer-approved chargers, and store at 40-60% charge when not in use for long periods.',
-      'why is recycling batteries important': 'Battery recycling prevents hazardous materials from polluting the environment, conserves valuable resources like lithium and cobalt, and reduces the need for new mining operations.',
-      'how to extend battery lifespan': 'Extend battery lifespan by avoiding frequent full discharges, keeping batteries between 20-80% charge, minimizing exposure to heat, and using smart charging practices.'
-    };
+    'what is soh': 'SOH stands for State of Health. It\'s a percentage representing a battery\'s current capacity relative to its original capacity. For example, 80% SOH means the battery holds 80% of its original charge capacity. This is different from State of Charge (SOC) which shows current charge level.',
     
-    const lowerMessage = userMessage.toLowerCase();
-    for (const [key, response] of Object.entries(fallbackResponses)) {
-      if (lowerMessage.includes(key)) {
-        return response;
-      }
+    'how to keep a battery healthy': 'To maintain battery health:\n• Avoid extreme temperatures (both hot and cold)\n• Prevent deep discharges - keep between 20-80% charge\n• Use manufacturer-approved chargers\n• Store at 40-60% charge for long periods\n• Avoid frequent fast charging\n• Perform regular calibration cycles',
+    
+    'why is recycling batteries important': 'Battery recycling is crucial because:\n• Prevents hazardous materials from polluting environment\n• Conserves valuable resources (lithium, cobalt, nickel)\n• Reduces need for new mining operations\n• Supports circular economy for battery materials\n• Reduces greenhouse gas emissions from production',
+    
+    'how to extend battery lifespan': 'Extend battery life by:\n• Avoid frequent full discharges\n• Keep charge between 20-80%\n• Minimize heat exposure\n• Use smart charging practices\n• Store properly when not in use\n• Avoid overcharging\n• Use compatible charging equipment',
+    
+    'battery maintenance tips': 'Essential battery maintenance:\n• Keep terminals clean and corrosion-free\n• Avoid physical damage\n• Store in cool, dry places\n• Use voltage stabilizers if needed\n• Perform regular capacity tests\n• Follow manufacturer guidelines\n• Monitor for swelling or damage',
+    
+    'recycling batteries': 'Battery recycling process:\n1. Collection and sorting by chemistry type\n2. Safe discharge and dismantling\n3. Material recovery (metals, plastics)\n4. Purification of recovered materials\n5. Manufacturing new products\n• Recycling rates vary by battery type\n• Proper disposal prevents environmental harm',
+    
+    'what is battery soh': 'Battery State of Health (SOH) is a key metric that indicates:\n• Remaining capacity compared to original\n• Overall battery condition and aging\n• Prediction of remaining useful life\n• SOH < 60% often indicates need for replacement\n• Regular SOH monitoring helps optimize battery usage',
+    
+    'soh threshold': 'The 60% SOH threshold is commonly used because:\n• Below 60%, batteries often can\'t provide required power\n• Significant capacity loss affects performance\n• Increased risk of sudden failure\n• Many applications require minimum 60% SOH for reliable operation\n• This threshold can be adjusted based on specific use cases'
+  };
+  
+  // Find the best matching response
+  for (const [key, response] of Object.entries(knowledgeBase)) {
+    if (lowerMessage.includes(key)) {
+      return response;
     }
-    
-    return "I apologize, but I'm having trouble accessing battery information right now. Please try again in a few moments.";
   }
+  
+  // Default battery response
+  return "I specialize in battery technology! I can help with:\n• State of Health (SOH) explanations\n• Battery maintenance and best practices\n• Recycling information and importance\n• Lifespan extension advice\n• General battery technology questions\n\nWhat specific aspect would you like to know about?";
 }
 
 module.exports = router;
