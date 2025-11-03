@@ -90,6 +90,8 @@ const styles = StyleSheet.create({
         borderRadius: theme.borderRadius.lg,
         borderColor: theme.colors.accentSecondary,
         borderWidth: 1,
+
+        color: theme.colors.textPrimary,
     },
 
     fileButton: {
