@@ -1,0 +1,11 @@
+{
+  "r2": 0.887224660327883,
+  "mse": 0.00790657234401887,
+  "mae": 0.07184090833216457,
+  "train_time_s": 0.1,
+  "model_type": "LinearRegression",
+  "features": 6,
+  "target": "SOH",
+  "data_samples": 870,
+  "low_soh_samples": 200
+}

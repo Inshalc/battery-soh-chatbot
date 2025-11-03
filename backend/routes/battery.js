@@ -5,7 +5,10 @@ const fs = require('fs');
 const router = express.Router();
 
 // Path to your Python model
-const pythonModelPath = path.join(__dirname, '../../Rmodel/src');
+const pythonModelPath = path.join(__dirname, '../../ml-model/src');
+// Path to your virtual environment Python
+const pythonVenvPath = '/Users/inshalchaudhry/battery-soh-chatbot-3/.venv/bin/python3';
+
 
 /**
  * Calculate Pack SOH features from 21 cell voltages
@@ -55,6 +58,46 @@ function calculatePackFeatures(cellVoltages) {
 }
 
 /**
+ * Validate if the calculated features are within expected ranges
+ * and provide guidance if they're not realistic
+ */
+function validateFeatures(features, cellVoltages) {
+    const [mean, median, std, min, max, skew] = features;
+    
+    // Expected ranges based on your training data
+    const expectedRanges = {
+        mean: { min: 3.2, max: 3.9 },
+        median: { min: 3.2, max: 3.9 },
+        std: { min: 0.05, max: 0.6 },
+        min: { min: 2.8, max: 3.7 },
+        max: { min: 3.4, max: 4.0 },
+        skew: { min: -2.0, max: 1.0 }
+    };
+    
+    const warnings = [];
+    
+    if (mean < 3.2 || mean > 3.9) {
+        warnings.push(`Mean voltage ${mean.toFixed(2)}V is outside typical range (3.2V-3.9V)`);
+    }
+    if (std > 0.6) {
+        warnings.push(`High standard deviation ${std.toFixed(2)}V indicates significant cell imbalance`);
+    }
+    if (min < 2.8) {
+        warnings.push(`Very low minimum voltage ${min.toFixed(2)}V suggests severely degraded cells`);
+    }
+    if (max > 4.0) {
+        warnings.push(`Very high maximum voltage ${max.toFixed(2)}V may indicate measurement error`);
+    }
+    
+    return warnings;
+}
+
+/**
+ * Predict Battery SOH from 21 cell data (U1-U21)
+ * POST /api/battery/predict
+ * Body: { batteryData: [array of 21 cell measurements] }
+ */
+/**
  * Predict Battery SOH from 21 cell data (U1-U21)
  * POST /api/battery/predict
  * Body: { batteryData: [array of 21 cell measurements] }
@@ -79,13 +122,18 @@ router.post('/predict', async (req, res) => {
 
         // ✅ AGGREGATE the 21 cells into 6 features (meets project requirement!)
         const features = calculatePackFeatures(batteryData);
+        
+        // Validate features and provide warnings if needed
+        const warnings = validateFeatures(features, batteryData);
+        if (warnings.length > 0) {
+            console.log('⚠️ Feature validation warnings:', warnings);
+        }
 
         // Escape the features for command line
         const featuresJson = JSON.stringify(features).replace(/'/g, "'\\''");
-        const pythonScript = path.join(pythonModelPath, 'quick_test.py');
         
-        // Use child_process.exec instead of PythonShell
-        const command = `cd "${pythonModelPath}" && python3 quick_test.py '${featuresJson}'`;
+        // Use virtual environment Python instead of system Python
+        const command = `cd "${pythonModelPath}" && "${pythonVenvPath}" quick_test.py '${featuresJson}'`;
         
         console.log('🔧 Running command:', command);
         console.log('🔮 Running SOH prediction with aggregated features...');
@@ -148,7 +196,8 @@ router.post('/predict', async (req, res) => {
                             Pack_SOH_max: features[4],
                             Pack_SOH_skew: features[5]
                         }
-                    }
+                    },
+                    warnings: warnings.length > 0 ? warnings : undefined
                 });
 
             } catch (parseError) {
@@ -301,3 +350,102 @@ router.post('/test-aggregation', (req, res) => {
 });
 
 module.exports = router;
+
+
+
+/**
+ * Test with example battery data
+ * POST /api/battery/test-examples
+ * Body: { exampleType: 'degraded' | 'healthy' }
+ */
+router.post('/test-examples', async (req, res) => {
+    try {
+        const { exampleType = 'degraded' } = req.body;
+        
+        // Example cell voltages that will produce realistic predictions
+        const examples = {
+            degraded: [
+                3.20, 3.22, 3.18, 3.25, 3.15, 3.28, 3.19, 3.21, 3.17, 3.23,
+                3.16, 3.24, 3.14, 3.26, 3.13, 3.27, 3.12, 3.29, 3.11, 3.30, 2.90
+            ], // One very low cell (2.90V) indicates degradation
+            
+            healthy: [
+                3.68, 3.69, 3.67, 3.70, 3.66, 3.71, 3.68, 3.69, 3.67, 3.70,
+                3.68, 3.69, 3.67, 3.70, 3.68, 3.69, 3.67, 3.70, 3.68, 3.69, 3.65
+            ] // All cells closely clustered around 3.68V
+        };
+        
+        const batteryData = examples[exampleType] || examples.degraded;
+        
+        // Use the existing prediction logic
+        const features = calculatePackFeatures(batteryData);
+        const featuresJson = JSON.stringify(features).replace(/'/g, "'\\''");
+        
+        const command = `cd "${pythonModelPath}" && "${pythonVenvPath}" quick_test.py '${featuresJson}'`;
+        
+        console.log(`🧪 Testing ${exampleType} battery example...`);
+        
+        exec(command, { timeout: 10000 }, (err, stdout, stderr) => {
+            if (err) {
+                console.error('❌ Python execution error:', err);
+                return res.status(500).json({
+                    error: 'Test prediction failed',
+                    details: err.message
+                });
+            }
+            
+            try {
+                const predictionResult = JSON.parse(stdout.trim());
+                
+                if (predictionResult.status === 'error') {
+                    return res.status(500).json({
+                        error: 'Test prediction error',
+                        details: predictionResult.error
+                    });
+                }
+                
+                const soh = predictionResult.soh;
+                const threshold = 0.6;
+                const status = soh >= threshold ? 'healthy' : 'has a problem';
+                
+                res.json({
+                    success: true,
+                    example_type: exampleType,
+                    prediction: {
+                        soh: soh,
+                        soh_percentage: (soh * 100).toFixed(1),
+                        status: status,
+                        message: soh >= threshold ? 'The battery is healthy.' : 'The battery has a problem.',
+                        threshold: threshold
+                    },
+                    sample_data: {
+                        cell_voltages: batteryData,
+                        features: {
+                            Pack_SOH_mean: features[0],
+                            Pack_SOH_median: features[1],
+                            Pack_SOH_std: features[2],
+                            Pack_SOH_min: features[3],
+                            Pack_SOH_max: features[4],
+                            Pack_SOH_skew: features[5]
+                        }
+                    },
+                    description: `This is a ${exampleType} battery example with ${batteryData.length} simulated cell voltages`
+                });
+                
+            } catch (parseError) {
+                console.error('❌ Error parsing test result:', parseError);
+                res.status(500).json({
+                    error: 'Failed to parse test prediction result',
+                    details: parseError.message
+                });
+            }
+        });
+        
+    } catch (error) {
+        console.error('❌ Test examples error:', error);
+        res.status(500).json({
+            error: 'Test failed',
+            details: error.message
+        });
+    }
+});
