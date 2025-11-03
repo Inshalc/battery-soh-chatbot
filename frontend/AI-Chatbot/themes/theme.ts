@@ -1,13 +1,13 @@
 // themes/theme.ts
 export const theme = {
     colors: {
-      background: '#0B0814',         // deep black-purple background
-      surface: '#1C1326',            // darker surface cards
+      background: '#0A0A10',         // deep black background
+      surface: '#1A1A1D',            // sleek dark surface tone
       accent: '#7B3EFF',             // glowing purple accent
       accentSecondary: '#9E6BFF',    // lighter purple for gradients
       textPrimary: '#FFFFFF',        // main text
-      textSecondary: '#B5A8C5',      // muted secondary text
-      border: 'rgba(255,255,255,0.1)',
+      textSecondary: '#A0A0A0',      // neutral secondary text for better readability
+      border: 'rgba(255,255,255,0.05)',  // faint border for dark UI separation
       success: '#4AEF8E',            // for “healthy battery” states
       warning: '#FFC34D',            // for medium battery
       danger: '#FF5C5C',             // for low SOH values

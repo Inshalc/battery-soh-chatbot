@@ -9,7 +9,7 @@ import React from 'react';
 export default function TabLayout() {
     return (
         <NativeTabs
-            backgroundColor={null} // optional (for blur on iOS)
+            backgroundColor='transparent' // optional (for blur on iOS)
             indicatorColor={theme.colors.accent}
             iconColor={{ default: theme.colors.textSecondary, selected: theme.colors.accent }}
             labelStyle={{

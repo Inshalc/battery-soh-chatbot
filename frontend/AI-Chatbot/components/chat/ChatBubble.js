@@ -3,6 +3,7 @@ import { theme } from '@/themes/theme';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import { BlurView } from 'expo-blur';
 
 const ChatBubble = ({text = 'Placeholder', isUser = true}) => {
 
@@ -18,6 +19,7 @@ const ChatBubble = ({text = 'Placeholder', isUser = true}) => {
             <View
                 style={[isUser ? styles.userBubble : styles.BotBubble, styles.chatBubble]}
             >
+                {/* <BlurView intensity={20} style={StyleSheet.absoluteFill} /> */}
                 <Text style={globalStyles.textPrimary}>{text}</Text>
             </View>
 
@@ -68,6 +70,8 @@ const styles = StyleSheet.create({
         borderRadius: theme.borderRadius.lg,
         paddingVertical: theme.spacing.sm,
         paddingHorizontal: theme.spacing.md,
+
+        overflow: 'hidden',
 
         maxWidth: '75%',
     },

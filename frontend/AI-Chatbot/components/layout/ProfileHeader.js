@@ -6,6 +6,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import IconButton from '../ui/IconButton';
 import PropTypes from 'prop-types';
 import { useRouter } from 'expo-router';
+import { BlurView } from 'expo-blur';
 
 const ProfileHeader = ({ onHeightChange, title = '[Text]' }) => {
     const insets = useSafeAreaInsets();
@@ -21,8 +22,10 @@ const ProfileHeader = ({ onHeightChange, title = '[Text]' }) => {
                 }
             }}
             
-            style={[styles.positioningContainer]}>
+            style={[styles.positioningContainer]}
+        >
             <View style={[styles.container, {paddingTop: 0}]}>
+                <BlurView intensity={20} style={StyleSheet.absoluteFill} pointerEvents="none"/>
 
                 <Text style={globalStyles.title}>{title}</Text>
                 <View style={styles.iconContainer}>
@@ -61,6 +64,7 @@ const styles = StyleSheet.create({
         top: 0,
         zIndex: 10,
 
+        
     },
 
     container: {
@@ -71,7 +75,7 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1,
         borderBottomColor: theme.colors.border,
 
-        backgroundColor: theme.colors.background,
+        backgroundColor: 'transparent',
 
         paddingBottom: theme.spacing.sm,
         paddingHorizontal: 20,

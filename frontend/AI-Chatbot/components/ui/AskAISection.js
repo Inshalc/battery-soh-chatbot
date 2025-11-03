@@ -6,12 +6,14 @@ import { globalStyles } from '@/themes/globalStyles';
 import { theme } from '@/themes/theme';
 import PropTypes from 'prop-types';
 import { useRouter } from 'expo-router';
+import { BlurView } from 'expo-blur';
 
 const AskAISection = ({ header = '[Header]', messages, chips}) => {
     const router = useRouter();
 
     return (
         <View style={[globalStyles.card, styles.container]}>
+            <BlurView intensity={20} style={StyleSheet.absoluteFill} />
             <Pressable
                 onPress={() => {
                     router.push('/(tabs)/chat');

@@ -4,6 +4,7 @@ import React, { useState, useEffect} from 'react';
 import { StyleSheet, TextInput, View } from 'react-native';
 import IconButton from '../ui/IconButton';
 import * as DocumentPicker from 'expo-document-picker';
+import { BlurView } from 'expo-blur';
 
 const ChatInput = ({ placeholder = 'Placeholder', onSend, onPick, preLoadedInput }) => {
     const [message, setMessage] = useState(preLoadedInput || '');
@@ -52,15 +53,18 @@ const ChatInput = ({ placeholder = 'Placeholder', onSend, onPick, preLoadedInput
                 size={theme.fontSize.md}
                 onPress={handlePick}
             />
-            <TextInput 
-                placeholderTextColor={theme.colors.textSecondary} 
-                placeholder={placeholder} 
-                style={styles.input}
+            <View style={styles.inputWrapper}>
+                <BlurView intensity={20} style={StyleSheet.absoluteFill} pointerEvents="none"/>
+                <TextInput 
+                    placeholderTextColor={theme.colors.textSecondary} 
+                    placeholder={placeholder} 
+                    style={styles.input}
 
-                value={message}
-                onChangeText={setMessage}
-                onSubmitEditing={handleSend}
-            />
+                    value={message}
+                    onChangeText={setMessage}
+                    onSubmitEditing={handleSend}
+                />
+            </View>
             <IconButton 
                 name="send" 
                 bgColor={theme.colors.accent} 
@@ -85,17 +89,27 @@ const styles = StyleSheet.create({
         gap: theme.spacing.sm,
     },
 
+    inputWrapper: {
+        flex: 1,                 // ← lets it stretch in the row
+        position: 'relative',    // ← needed for absoluteFill
+        overflow: 'hidden',      // ← clip blur to rounded corners
+        borderRadius: theme.borderRadius.lg,
+        borderColor: theme.colors.border,
+        borderWidth: 1,
+        backgroundColor: 'transparent',
+    },
+
     input: {
         flexGrow: 1,
 
-        backgroundColor: theme.colors.surface,
+        backgroundColor: 'transparent',
         fontSize: theme.fontSize.md,
 
         paddingVertical: theme.spacing.sm,
         paddingHorizontal: theme.spacing.md,
 
         borderRadius: theme.borderRadius.lg,
-        borderColor: theme.colors.accentSecondary,
+        borderColor: theme.colors.border,
         borderWidth: 1,
 
         color: theme.colors.textPrimary,
