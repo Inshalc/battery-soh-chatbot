@@ -13,10 +13,11 @@ export default function TabLayout() {
             indicatorColor={theme.colors.accent}
             iconColor={{ default: theme.colors.textSecondary, selected: theme.colors.accent }}
             labelStyle={{
-            default: { color: theme.colors.textSecondary },
-            selected: { color: theme.colors.accent },
-        }}
+                default: { color: theme.colors.textSecondary },
+                selected: { color: theme.colors.accent },
+            }}
         >
+            
             
             <NativeTabs.Trigger name='index' >
                 <Label>Home</Label>

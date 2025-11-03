@@ -13,6 +13,7 @@ import { View, ScrollView } from "react-native";
 import FilterChips from '@/components/ui/FilterChips';
 import FilterSection from'@/components/ui/FilterSection.js';
 import AskAISection from '@/components/ui/AskAISection.js';
+import MessageList from '@/components/chat/MessageList.js';
 
 export default function Components() {
   // fro header height padding

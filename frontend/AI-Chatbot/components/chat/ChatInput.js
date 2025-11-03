@@ -1,25 +1,73 @@
 import { theme } from "@/themes/theme";
 import PropTypes from "prop-types";
-import React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, TextInput, View } from 'react-native';
 import IconButton from '../ui/IconButton';
+import * as DocumentPicker from 'expo-document-picker';
 
-const ChatInput = ({placeholder = 'Placeholder'}) => {
+const ChatInput = ({ placeholder = 'Placeholder', onSend, onPick }) => {
+    const [message, setMessage] = useState('');
+
+    const handlePick = async () => {
+        try {
+            const result = await DocumentPicker.getDocumentAsync({ type: '*/*', copyToCacheDirectory: true, multiple: false });
+            if (result.canceled) return;
+            const file = result.assets?.[0];
+            if (!file) return;
+
+            // if parent provided a file handler, pass the whole file
+            if (typeof onPick === 'function') {
+                onPick(file);
+                return;
+            }
+
+            // fallback: send a simple message stub
+            if (typeof onSend === 'function') {
+                onSend(`[File] ${file.name || 'attachment'}`);
+            }
+        } catch (e) {
+            console.warn('Document pick failed:', e);
+        }
+    };
+
+    const handleSend = () => {
+        if (!message.trim()) return;
+        onSend?.(message);
+        setMessage('');
+    }
+
     return (
         <View style={styles.container}>
-            <IconButton borderColor={theme.colors.accentSecondary} name="folder" bgColor={theme.colors.surface} size={theme.fontSize.md}/>
+            <IconButton 
+                borderColor={theme.colors.accentSecondary} 
+                name="folder" 
+                bgColor={theme.colors.surface} 
+                size={theme.fontSize.md}
+                onPress={handlePick}
+            />
             <TextInput 
                 placeholderTextColor={theme.colors.textSecondary} 
                 placeholder={placeholder} 
                 style={styles.input}
+
+                value={message}
+                onChangeText={setMessage}
+                onSubmitEditing={handleSend}
             />
-            <IconButton name="send" bgColor={theme.colors.accent} size={theme.fontSize.md}/>
+            <IconButton 
+                name="send" 
+                bgColor={theme.colors.accent} 
+                size={theme.fontSize.md}
+                onPress={handleSend}
+            />
         </View>
     );
 };
 
 ChatInput.propTypes = {
     placeholder: PropTypes.string,
+    onSend: PropTypes.func,
+    onPick: PropTypes.func,
 }
 
 const styles = StyleSheet.create({
