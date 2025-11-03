@@ -1,15 +1,33 @@
 import { Text, View } from "react-native";
+import React, { useState } from 'react';
+import Screen from "@/components/layout/Screen";
+import { ScrollView } from "react-native";
+import ProfileHeader from "@/components/layout/ProfileHeader";
+import { theme } from "@/themes/theme";
 
 export default function Settings() {
+  // fro header height padding
+  const [headerHeight, setHeaderHeight] = useState(0);
+
   return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-      }}
+    <Screen 
+      avoidTopInset={true} 
     >
-      <Text>Edit app/(tabs)/settings.tsx to edit this screen.</Text>
-    </View>
+      <ProfileHeader onHeightChange={setHeaderHeight} title="Battery SOH Chatbot"/>
+
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+
+        contentContainerStyle={
+          [
+            {paddingTop: headerHeight + theme.spacing.lg},
+            {paddingBottom: theme.spacing.lg},
+            {gap: theme.spacing.lg}
+          ]
+        }
+      >
+
+      </ScrollView>
+    </Screen>
   );
 }
