@@ -50,7 +50,12 @@ const AskAISection = ({ header = '[Header]', messages, chips}) => {
                                         onPressIn={onPressIn}
                                         onPressOut={onPressOut}
                                         onPress={() => {
-                                            router.push('/(tabs)/chat');
+                                            router.push({
+                                                pathname: '/(tabs)/chat',
+                                                params: {
+                                                    preLoadedMessage: chip.text
+                                                }
+                                            });
                                         }}
                                     >
                                         <Text style={styles.chipText}>{chip.text}</Text>

@@ -7,6 +7,7 @@ import { KeyboardAvoidingView, Platform, StyleSheet, Text, View, ScrollView } fr
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useHeaderHeight } from '@react-navigation/elements';
 import MessageList from '@/components/chat/MessageList';
+import { useLocalSearchParams } from 'expo-router';
 
 
 // for messagelist
@@ -38,13 +39,19 @@ const initialMessages: ChatMsg[] = [
 export default function Chat() {
   const [messages, setMessages] = useState<ChatMsg[]>(initialMessages);
 
-  const tabBarHeight = useHeaderHeight();
-
   const insets = useSafeAreaInsets();
-  const bottomOffset = tabBarHeight + insets.bottom;
 
   // fro header height padding
   const [headerHeight, setHeaderHeight] = useState(0);
+
+  // to preload text from AskAISection
+  const { preLoadedMessage } = useLocalSearchParams();
+  const prefill =
+    typeof preLoadedMessage === 'string'
+      ? preLoadedMessage
+      : Array.isArray(preLoadedMessage)
+      ? preLoadedMessage[0]
+      : '';
 
   return (
     <Screen 
@@ -72,10 +79,13 @@ export default function Chat() {
         <View style={[styles.inputContainer]}>
         <ChatInput 
           placeholder='Enter Prompt...'
+          preLoadedInput={prefill}
           onSend={(msg: string) => 
             setMessages(prev => [...prev, { id: Date.now(), text: msg, isUser: true }])
           }
-          onPick={(file: { name?: string}) => alert(`Selected file: ${file.name || 'Unnamed file'}`)}
+          onPick={(file: { name?: string}) => 
+            alert(`Selected file: ${file.name || 'Unnamed file'}`)
+          }
         />
         </View>
       </KeyboardAvoidingView>

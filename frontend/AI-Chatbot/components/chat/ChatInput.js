@@ -1,12 +1,19 @@
 import { theme } from "@/themes/theme";
 import PropTypes from "prop-types";
-import React, { useState } from 'react';
+import React, { useState, useEffect} from 'react';
 import { StyleSheet, TextInput, View } from 'react-native';
 import IconButton from '../ui/IconButton';
 import * as DocumentPicker from 'expo-document-picker';
 
-const ChatInput = ({ placeholder = 'Placeholder', onSend, onPick }) => {
-    const [message, setMessage] = useState('');
+const ChatInput = ({ placeholder = 'Placeholder', onSend, onPick, preLoadedInput }) => {
+    const [message, setMessage] = useState(preLoadedInput || '');
+
+    useEffect(() => {
+        // only set when a new non-empty value arrives
+        if (typeof preLoadedInput === 'string') {
+          setMessage(preLoadedInput);
+        }
+    }, [preLoadedInput]);
 
     const handlePick = async () => {
         try {
