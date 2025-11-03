@@ -8,10 +8,7 @@ from pathlib import Path
 def predict_soh(battery_data):
     """
     Predict SOH from battery data
-    battery_data: list of 6 aggregated features in order:
-    [Pack_SOH_mean, Pack_SOH_median, Pack_SOH_std, Pack_SOH_min, Pack_SOH_max, Pack_SOH_skew]
-    
-    IMPORTANT: Your features should be in the actual voltage ranges (around 3.2-3.9V)
+    battery_data: list of 6 aggregated features
     """
     try:
         BASE_DIR = Path(__file__).parent.parent
@@ -41,6 +38,13 @@ def predict_soh(battery_data):
         if features.shape[1] != 6:
             return {
                 'error': f"Expected 6 features, got {features.shape[1]}",
+                'status': 'error'
+            }
+        
+        # Check for NaN or infinite values
+        if np.any(np.isnan(features)) or np.any(np.isinf(features)):
+            return {
+                'error': 'Invalid feature values detected (NaN or infinity)',
                 'status': 'error'
             }
         

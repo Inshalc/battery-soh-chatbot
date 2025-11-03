@@ -33,8 +33,16 @@ function calculatePackFeatures(cellVoltages) {
     const min = Math.min(...cellVoltages);
     const max = Math.max(...cellVoltages);
     
-    // Simple skewness calculation (third standardized moment)
-    const skew = cellVoltages.reduce((sum, val) => sum + Math.pow((val - mean) / std, 3), 0) / cellVoltages.length;
+    // FIXED: Robust skewness calculation that handles zero std
+    let skew = 0;
+    if (std > 0.001) { // Only calculate skew if there's meaningful variation
+        const n = cellVoltages.length;
+        const skewSum = cellVoltages.reduce((sum, val) => {
+            return sum + Math.pow((val - mean) / std, 3);
+        }, 0);
+        skew = (n / ((n - 1) * (n - 2))) * skewSum;
+    }
+    // If all values are identical, skew remains 0 (perfect symmetry)
     
     const features = [
         mean,      // Pack_SOH_mean
