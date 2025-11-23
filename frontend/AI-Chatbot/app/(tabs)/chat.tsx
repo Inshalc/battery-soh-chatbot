@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import ChatInput from '@/components/chat/ChatInput.js';
-import ProfileHeader from '@/components/layout/ProfileHeader';
 import Screen from '@/components/layout/Screen';
 import { theme } from "@/themes/theme";
 import { KeyboardAvoidingView, Platform, StyleSheet, Text, View, ScrollView } from "react-native";
@@ -41,9 +40,6 @@ export default function Chat() {
 
   const insets = useSafeAreaInsets();
 
-  // fro header height padding
-  const [headerHeight, setHeaderHeight] = useState(0);
-
   // to preload text from AskAISection
   const { preLoadedMessage } = useLocalSearchParams();
   const prefill =
@@ -55,18 +51,14 @@ export default function Chat() {
 
   return (
     <Screen 
-      avoidTopInset={true} 
-
       style={
         [
           {paddingBottom: 2 * insets.bottom},
-          {paddingTop: headerHeight},
           // {paddingBottom: theme.spacing.lg},
           {gap: theme.spacing.lg}
         ]
       }
     >
-      <ProfileHeader onHeightChange={setHeaderHeight} title="Chatbot"/>
 
       {/* For input */}
       <KeyboardAvoidingView

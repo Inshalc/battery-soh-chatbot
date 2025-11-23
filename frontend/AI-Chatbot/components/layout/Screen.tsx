@@ -12,7 +12,7 @@ interface ScreenProps {
   avoidTopInset?: boolean;
 }
 
-export default function Screen({ children, padded = true, style, avoidTopInset = false }: ScreenProps) {
+export default function Screen({ children, padded = true, style, avoidTopInset = true }: ScreenProps) {
   const insets = useSafeAreaInsets();
   const gutterH = 20; // your global horizontal padding
 

@@ -3,7 +3,6 @@
 import React, { useState } from 'react';
 import ChatBubble from "@/components/chat/ChatBubble.js";
 import ChatInput from "@/components/chat/ChatInput";
-import ProfileHeader from "@/components/layout/ProfileHeader.js";
 import Screen from '@/components/layout/Screen';
 import GradientButton from "@/components/ui/GradientButton";
 import GreetingCard from "@/components/ui/GreetingCard.js";
@@ -16,8 +15,6 @@ import AskAISection from '@/components/ui/AskAISection.js';
 import MessageList from '@/components/chat/MessageList.js';
 
 export default function Components() {
-  // fro header height padding
-  const [headerHeight, setHeaderHeight] = useState(0);
 
   // for filterchips
   // for chips
@@ -53,7 +50,7 @@ export default function Components() {
   return (
     
 
-    <Screen avoidTopInset={true} style={{paddingTop: headerHeight}}>
+    <Screen>
       <ScrollView
         contentContainerStyle={{
             flex: 1,
@@ -61,7 +58,6 @@ export default function Components() {
             // alignItems: 'center',
         }}
       >
-        <ProfileHeader onHeightChange={setHeaderHeight} title='Components'/>
 
         <GradientButton text="Gradient Button"></GradientButton>
         <ChatBubble text="This is a User Message" isUser={true}/>

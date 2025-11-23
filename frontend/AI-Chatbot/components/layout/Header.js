@@ -7,85 +7,96 @@ import IconButton from '../ui/IconButton';
 import PropTypes from 'prop-types';
 import { useRouter } from 'expo-router';
 import { BlurView } from 'expo-blur';
+// import { SafeAreaView } from 'react-native-safe-area-context';
 
-const ProfileHeader = ({ onHeightChange, title = '[Text]' }) => {
+const Header = ({ title = '[Text]' }) => {
     const insets = useSafeAreaInsets();
-
     const router = useRouter();
 
     return (
-        <View 
-            onLayout={(event) => {
-                const { height } = event.nativeEvent.layout;
-                if (onHeightChange) {
-                    onHeightChange(height);
+        <View
+            style={[
+                styles.positioningContainer,
+                {
+                    paddingTop: insets.top
                 }
-            }}
-            
-            style={[styles.positioningContainer]}
+            ]}
         >
-            <View style={[styles.container, {paddingTop: 0}]}>
-                <BlurView intensity={20} style={StyleSheet.absoluteFill} pointerEvents="none"/>
+            <BlurView
+                intensity={20}
+                style={StyleSheet.absoluteFill}
+                pointerEvents="none"
+            />
 
-                <Text style={globalStyles.title}>{title}</Text>
+            <View style={styles.inner} edges={['top']}>
+                <Text
+                    style={[globalStyles.title, styles.title]}
+                    numberOfLines={1}
+                    ellipsizeMode="tail"
+                >
+                    {title}
+                </Text>
+
                 <View style={styles.iconContainer}>
-                    <IconButton 
-                        name="person" 
-                        bgColor='transparent' 
-                        size={theme.fontSize.lg} 
+                    <IconButton
+                        name="person"
+                        bgColor="transparent"
+                        size={theme.fontSize.lg}
                         handlePress={() => {
                             router.push('/(tabs)/settings');
                         }}
                     />
-                    <IconButton 
-                        name="log-out" 
-                        bgColor='transparent' 
+                    <IconButton
+                        name="log-out"
+                        bgColor="transparent"
                         size={theme.fontSize.lg}
                         handlePress={() => {
                             router.push('/landing');
                         }}
                     />
                 </View>
-
             </View>
         </View>
     );
-}
+};
 
-ProfileHeader.propTypes = {
+Header.propTypes = {
     title: PropTypes.string,
 };
 
 const styles = StyleSheet.create({
     positioningContainer: {
         position: 'absolute',
-        left: 0, 
-        right: 0, 
+        left: 0,
+        right: 0,
         top: 0,
         zIndex: 10,
-
-        
     },
 
-    container: {
-        display: 'flex',
+    inner: {
         flexDirection: 'row',
-        justifyContent: 'space-between',
         alignItems: 'center',
+        justifyContent: 'space-between',
+
+        paddingBottom: theme.spacing.sm,
+        paddingHorizontal: theme.spacing.md,
+
         borderBottomWidth: 1,
         borderBottomColor: theme.colors.border,
 
         backgroundColor: 'transparent',
-
-        paddingBottom: theme.spacing.sm,
-        paddingHorizontal: 20,
     },
-    
+
+    title: {
+        flex: 1,
+        marginRight: theme.spacing.sm,
+    },
+
     iconContainer: {
-        display: 'flex',
         flexDirection: 'row',
+        alignItems: 'center',
         gap: theme.spacing.xs,
-    }
+    },
 });
 
-export default ProfileHeader;
+export default Header;

@@ -2,7 +2,6 @@ import { Text, View } from "react-native";
 import React, { useState } from 'react';
 import Screen from "@/components/layout/Screen";
 import { ScrollView } from "react-native";
-import ProfileHeader from "@/components/layout/ProfileHeader";
 import { theme } from "@/themes/theme";
 
 export default function Settings() {
@@ -10,11 +9,7 @@ export default function Settings() {
   const [headerHeight, setHeaderHeight] = useState(0);
 
   return (
-    <Screen 
-      avoidTopInset={true} 
-    >
-      <ProfileHeader onHeightChange={setHeaderHeight} title="Battery SOH Chatbot"/>
-
+    <Screen>
       <ScrollView
         showsVerticalScrollIndicator={false}
 
