@@ -29,6 +29,11 @@ export default function TabLayout() {
                 <Icon sf='bubble.left' drawable='chat'></Icon>
             </NativeTabs.Trigger>
 
+            <NativeTabs.Trigger name='games'>
+                <Label>Games</Label>
+                <Icon sf='gamecontroller' drawable='ic_game_controller'></Icon>
+            </NativeTabs.Trigger>
+
             <NativeTabs.Trigger name='settings'>
                 <Label>Settings</Label>
                 <Icon sf='gear' drawable='settings'></Icon>

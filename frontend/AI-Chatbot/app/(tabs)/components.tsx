@@ -67,7 +67,7 @@ export default function Components() {
         <ChatBubble text="This is a User Message" isUser={true}/>
         <ChatBubble text="This is an AI Message" isUser={false} />
         <IconButton bgColor="black" size={theme.fontSize.md} iconColor={theme.colors.textPrimary}></IconButton>
-        <ChatInput />
+        {/* <ChatInput /> */}
         
         <GreetingCard />
 
