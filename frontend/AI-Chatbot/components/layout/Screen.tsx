@@ -4,6 +4,7 @@ import React, { ReactNode } from 'react';
 import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ImageBackground } from 'react-native';
+import { useState } from 'react';
 
 interface ScreenProps {
   children: ReactNode;
@@ -12,9 +13,11 @@ interface ScreenProps {
   avoidTopInset?: boolean;
 }
 
-export default function Screen({ children, padded = true, style, avoidTopInset = true }: ScreenProps) {
+export default function Screen({ children, padded = true, style}: ScreenProps) {
   const insets = useSafeAreaInsets();
-  const gutterH = 20; // your global horizontal padding
+  const gutterH = theme.spacing.md; // your global horizontal padding
+
+  const [headerHeight, setHeaderHeight] = useState(0);
 
   return (
     <ImageBackground
@@ -23,13 +26,13 @@ export default function Screen({ children, padded = true, style, avoidTopInset =
       resizeMode="cover"
     >
 
-      <SafeAreaView style={[styles.root, !avoidTopInset && { paddingTop: insets.top }]}>
+      <SafeAreaView style={[styles.root]}>
         <View
           style={[
             styles.body,
             padded && {
               paddingHorizontal: gutterH,
-              paddingTop: avoidTopInset ? 0 : theme.spacing.sm,
+              paddingTop: headerHeight + insets.top,
               paddingBottom: theme.spacing.sm,
             },
             style,

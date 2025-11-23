@@ -9,7 +9,7 @@ import { useRouter } from 'expo-router';
 import { BlurView } from 'expo-blur';
 // import { SafeAreaView } from 'react-native-safe-area-context';
 
-const Header = ({ title = '[Text]' }) => {
+const Header = ({ title = '[Text]', onHeightChange }) => {
     const insets = useSafeAreaInsets();
     const router = useRouter();
 
@@ -21,6 +21,13 @@ const Header = ({ title = '[Text]' }) => {
                     paddingTop: insets.top
                 }
             ]}
+
+            onLayout={(event) => {
+                const { height } = event.nativeEvent.layout;
+                if (onHeightChange) {
+                    onHeightChange(height);
+                }
+            }}
         >
             <BlurView
                 intensity={20}

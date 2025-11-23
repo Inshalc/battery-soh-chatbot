@@ -12,7 +12,7 @@ import {
 import React from 'react';
 
 export default function TabLayout() {
-    // const [headerTitle, setHeaderTitle] = useState('Header');
+    const [headerHeight, setHeaderHeight] = useState(0);
     const insets = useSafeAreaInsets();
 
     const pathname = usePathname();
@@ -32,6 +32,7 @@ export default function TabLayout() {
 
             {/* global header */}
             <Header
+                onHeightChange={setHeaderHeight}
                 title={headerTitle}
             />
 
