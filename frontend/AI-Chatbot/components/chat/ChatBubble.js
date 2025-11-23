@@ -16,10 +16,12 @@ const ChatBubble = ({text = 'Placeholder', isUser = true}) => {
             ]}
         
         >
+
             <View
                 style={[isUser ? styles.userBubble : styles.BotBubble, styles.chatBubble]}
             >
-                {/* <BlurView intensity={20} style={StyleSheet.absoluteFill} /> */}
+                {/* <BlurView intensity={10} style={StyleSheet.absoluteFill} /> */}
+
                 <Text style={globalStyles.textPrimary}>{text}</Text>
             </View>
 
@@ -53,6 +55,8 @@ const styles = StyleSheet.create({
         marginVertical: theme.spacing.xs,
         flexDirection: 'row',
         alignItems: 'flex-end',
+
+        // overflow: 'hidden',
     },
 
     userContainer: {
@@ -81,7 +85,7 @@ const styles = StyleSheet.create({
     },
 
     BotBubble: {
-        backgroundColor: theme.colors.surface,
+        backgroundColor: theme.colors.surface + 'CC', // CC adds transparency
     },
 
     // stlying for tail, dependin on if for user or bot
@@ -105,7 +109,7 @@ const styles = StyleSheet.create({
       tailBot: {
         left: -5,
         borderBottomLeftRadius: 16,
-        backgroundColor: theme.colors.surface,
+        backgroundColor: theme.colors.surface + 'CC',
         width: 14,
         height: 18,
         transform: [{ rotate: '-25deg' }],

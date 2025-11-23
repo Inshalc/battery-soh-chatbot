@@ -13,7 +13,7 @@ const AskAISection = ({ header = '[Header]', messages, chips}) => {
 
     return (
         <View style={[globalStyles.card, styles.container]}>
-            <BlurView intensity={20} style={StyleSheet.absoluteFill} />
+            <BlurView intensity={10} style={StyleSheet.absoluteFill} />
             <Pressable
                 onPress={() => {
                     router.push('/(tabs)/chat');

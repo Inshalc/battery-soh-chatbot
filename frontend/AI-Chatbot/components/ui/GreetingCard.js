@@ -8,7 +8,7 @@ import { BlurView } from 'expo-blur';
 const GreetingCard = ({name = '[Name]'}) => {
     return (
         <View style={[globalStyles.card, styles.container]}>
-            <BlurView intensity={20} style={StyleSheet.absoluteFill} />
+            <BlurView intensity={10} style={StyleSheet.absoluteFill} />
 
             <Text style={globalStyles.title}>Welcome {name}! </Text>
             <Text style={[globalStyles.textSecondary, styles.subtext]}>This is the homepage, view information about your output below!</Text>
@@ -31,6 +31,8 @@ const styles = StyleSheet.create({
         gap: theme.spacing.md,
 
         backgroundColor: 'transparent',
+
+        overflow: 'hidden',
     },
 });
 

@@ -30,7 +30,7 @@ const Header = ({ title = '[Text]', onHeightChange }) => {
             }}
         >
             <BlurView
-                intensity={20}
+                intensity={10}
                 style={StyleSheet.absoluteFill}
                 pointerEvents="none"
             />

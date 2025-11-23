@@ -8,7 +8,7 @@ import { BlurView } from 'expo-blur';
 const FilterCard = ({ mainText = '[Main Text]', subText = '[Sub Text]' }) => {
     return (
         <View style={ [globalStyles.card, styles.container] }>
-            <BlurView intensity={20} style={StyleSheet.absoluteFill} />
+            <BlurView intensity={10} style={StyleSheet.absoluteFill} />
 
             <Text style={styles.mainText}>{mainText}</Text>
             <Text style={styles.subText}>{subText}</Text>
@@ -37,6 +37,8 @@ const styles = StyleSheet.create({
         shadowOpacity: 0,
         shadowRadius: 0,
         elevation: 0, // Android
+
+        overflow: 'hidden',
     },
 
     mainText: {
