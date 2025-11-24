@@ -55,7 +55,7 @@ export default function Index() {
                         ]
                     }
                 >
-                    <GreetingCard />
+                    <GreetingCard greeting='Welcome!' description='This is the homepage, view information about your output below!'/>
 
                     <View style={styles.askAIContainer}>
                         <Text style={globalStyles.title}>Have Questions?</Text>

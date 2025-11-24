@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import Screen from "@/components/layout/Screen";
 import { ScrollView } from "react-native";
 import { theme } from "@/themes/theme";
+import GreetingCard from "@/components/ui/GreetingCard";
 
 export default function Settings() {
   // fro header height padding
@@ -21,6 +22,8 @@ export default function Settings() {
           ]
         }
       >
+
+        <GreetingCard greeting="Hi!" description="This is the setting page, where you can change any settings you want" />
 
       </ScrollView>
     </Screen>
