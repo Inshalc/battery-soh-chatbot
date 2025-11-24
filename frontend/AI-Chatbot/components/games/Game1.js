@@ -9,6 +9,8 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
+import { theme } from '@/themes/theme';
+import Screen from "../layout/Screen";
 
 const questions = [
   {
@@ -186,73 +188,75 @@ export default function Game1({ setScreen, setFinalScore, setMissedQuestions }) 
   };
 
   const current = questions[index];
-  const sohColor = current.soh >= 0.7 ? "#4ade80" : current.soh >= 0.6 ? "#facc15" : "#a855f7";
+  const sohColor = current.soh >= 0.7 ? theme.colors.success : current.soh >= 0.6 ? theme.colors.warning : theme.colors.accent;
 
   return (
-    <LinearGradient colors={["#000000", "#2e005e"]} style={styles.container}>
-      <View style={styles.topHalf}>
-        <Text style={styles.title}>⚡ Battery Master ⚡</Text>
-        <Text style={styles.subtitle}>Decide to reuse or recycle each battery!</Text>
-        <Text style={styles.score}>Score: {score}</Text>
-      </View>
+    <Screen padded={false}>
+      <LinearGradient colors={['transparent', theme.colors.accent]} style={styles.container}>
+        <View style={styles.topHalf}>
+          <Text style={styles.title}>⚡ Battery Master ⚡</Text>
+          <Text style={styles.subtitle}>Decide to reuse or recycle each battery!</Text>
+          <Text style={styles.score}>Score: {score}</Text>
+        </View>
 
-      <View style={styles.bottomHalf}>
-        <Animated.View style={[styles.card, { borderColor: sohColor, opacity: fadeAnim }]}>
-          <Text style={styles.batteryTitle}>Battery #{current.id}</Text>
-          <Text style={styles.questionText}>{current.question}</Text>
-          <Text style={[styles.sohText, { color: sohColor }]}>SOH: {(current.soh * 100).toFixed(0)}%</Text>
-        </Animated.View>
+        <View style={styles.bottomHalf}>
+          <Animated.View style={[styles.card, { borderColor: sohColor, opacity: fadeAnim }]}>
+            <Text style={styles.batteryTitle}>Battery #{current.id}</Text>
+            <Text style={styles.questionText}>{current.question}</Text>
+            <Text style={[styles.sohText, { color: sohColor }]}>SOH: {(current.soh * 100).toFixed(0)}%</Text>
+          </Animated.View>
 
-        {!feedback && (
-          <View style={styles.buttonsContainer}>
-            <TouchableWithoutFeedback onPress={() => { animateButton(reuseAnim); handleDecision("reuse"); }}>
-              <Animated.View style={[styles.button, { backgroundColor: "#4ade80", transform: [{ scale: reuseAnim }] }]}>
-                <Text style={styles.buttonText}>Reuse</Text>
-              </Animated.View>
-            </TouchableWithoutFeedback>
+          {!feedback && (
+            <View style={styles.buttonsContainer}>
+              <TouchableWithoutFeedback onPress={() => { animateButton(reuseAnim); handleDecision("reuse"); }}>
+                <Animated.View style={[styles.button, { backgroundColor: theme.colors.success, transform: [{ scale: reuseAnim }] }]}>
+                  <Text style={styles.buttonText}>Reuse</Text>
+                </Animated.View>
+              </TouchableWithoutFeedback>
 
-            <TouchableWithoutFeedback onPress={() => { animateButton(recycleAnim); handleDecision("recycle"); }}>
-              <Animated.View style={[styles.button, { backgroundColor: "#f87171", transform: [{ scale: recycleAnim }] }]}>
-                <Text style={styles.buttonText}>Recycle</Text>
-              </Animated.View>
-            </TouchableWithoutFeedback>
-          </View>
-        )}
+              <TouchableWithoutFeedback onPress={() => { animateButton(recycleAnim); handleDecision("recycle"); }}>
+                <Animated.View style={[styles.button, { backgroundColor: theme.colors.danger, transform: [{ scale: recycleAnim }] }]}>
+                  <Text style={styles.buttonText}>Recycle</Text>
+                </Animated.View>
+              </TouchableWithoutFeedback>
+            </View>
+          )}
 
-        {feedback && (
-          <View style={styles.feedbackBox}>
-            <Text style={[styles.feedbackText, { color: feedback.correct ? "#4ade80" : "#f87171" }]}>{feedback.message}</Text>
-            <Text style={styles.explanationText}>{feedback.explanation}</Text>
-            <Text style={styles.linkText} onPress={() => Linking.openURL(feedback.link)}>🔗 Learn more</Text>
-          </View>
-        )}
+          {feedback && (
+            <View style={styles.feedbackBox}>
+              <Text style={[styles.feedbackText, { color: feedback.correct ? theme.colors.success : theme.colors.danger }]}>{feedback.message}</Text>
+              <Text style={styles.explanationText}>{feedback.explanation}</Text>
+              <Text style={styles.linkText} onPress={() => Linking.openURL(feedback.link)}>🔗 Learn more</Text>
+            </View>
+          )}
 
-        <Text style={styles.footer}>Question {index + 1} of {questions.length}</Text>
+          <Text style={styles.footer}>Question {index + 1} of {questions.length}</Text>
 
-        <TouchableOpacity onPress={() => setScreen("login")} style={{ marginTop: 20 }}>
-          <Text style={{ color: "#a78bfa", fontSize: 16 }}>← Back to Login</Text>
-        </TouchableOpacity>
-      </View>
-    </LinearGradient>
+          <TouchableOpacity onPress={() => setScreen("login")} style={{ marginTop: 20 }}>
+            <Text style={{ color: theme.colors.textPrimary, fontSize: theme.fontSize.md }}>← Back to Games</Text>
+          </TouchableOpacity>
+        </View>
+      </LinearGradient>
+    </Screen>
   );
 }
 const styles = StyleSheet.create({
   container: { flex: 1 },
-  topHalf: { flex: 0.45, backgroundColor: "#000", borderBottomLeftRadius: 40, borderBottomRightRadius: 40, alignItems: "center", justifyContent: "center", paddingTop: 40 },
-  bottomHalf: { flex: 0.55, justifyContent: "flex-start", alignItems: "center", paddingTop: 30 },
-  title: { fontSize: 38, fontWeight: "bold", color: "#fff", textShadowColor: "#8b5cf6", textShadowOffset: { width: 0, height: 2 }, textShadowRadius: 6 },
-  subtitle: { fontSize: 16, color: "#ccc", marginTop: 8 },
-  score: { fontSize: 20, color: "#fff", marginTop: 15 },
-  card: { width: "85%", padding: 25, borderRadius: 25, backgroundColor: "#fff", alignItems: "center", borderWidth: 4, shadowColor: "#8b5cf6", shadowOffset: { width: 0, height: 8 }, shadowOpacity: 0.4, shadowRadius: 10, elevation: 8 },
-  batteryTitle: { fontSize: 28, color: "#000", marginBottom: 10, fontWeight: "bold" },
-  questionText: { fontSize: 17, color: "#333", textAlign: "center", marginBottom: 10 },
+  topHalf: { flex: 0.4, backgroundColor: 'transparent', borderBottomLeftRadius: theme.borderRadius.lg, borderBottomRightRadius: theme.borderRadius.lg, alignItems: "center", justifyContent: "center", paddingTop: theme.spacing.lg },
+  bottomHalf: { flex: 0.55, justifyContent: "flex-start", alignItems: "center", paddingTop: theme.spacing.lg },
+  title: { fontSize: 38, fontWeight: "bold", color: theme.colors.textPrimary, textShadowColor: theme.colors.accentSecondary, textShadowOffset: { width: 0, height: 2 }, textShadowRadius: 6 },
+  subtitle: { fontSize: theme.fontSize.md, color: theme.colors.textSecondary, marginTop: 8 },
+  score: { fontSize: 20, color: theme.colors.textPrimary, marginTop: 15 },
+  card: { width: "85%", padding: 25, borderRadius: theme.borderRadius.lg, backgroundColor: theme.colors.surface, alignItems: "center", borderWidth: 4, shadowColor: theme.shadows.soft.shadowColor, shadowOffset: { width: 0, height: 8 }, shadowOpacity: 0.4, shadowRadius: 10, elevation: 8 },
+  batteryTitle: { fontSize: 28, color: theme.colors.textPrimary, marginBottom: 10, fontWeight: "bold" },
+  questionText: { fontSize: 17, color: theme.colors.textSecondary, textAlign: "center", marginBottom: 10 },
   sohText: { fontSize: 22, fontWeight: "bold" },
   buttonsContainer: { flexDirection: "row", justifyContent: "space-between", width: "80%", marginTop: 40 },
   button: { flex: 1, marginHorizontal: 10, paddingVertical: 16, borderRadius: 16, alignItems: "center", shadowColor: "#000", shadowOffset: { width: 0, height: 6 }, shadowOpacity: 0.4, shadowRadius: 10, elevation: 6 },
-  buttonText: { color: "#fff", fontSize: 18, fontWeight: "bold" },
-  feedbackBox: { marginTop: 30, width: "85%", backgroundColor: "#1e1e2f", borderRadius: 16, padding: 20, shadowColor: "#8b5cf6", shadowOpacity: 0.3, shadowRadius: 10 },
+  buttonText: { color: theme.colors.textPrimary, fontSize: 18, fontWeight: "bold" },
+  feedbackBox: { marginTop: 30, width: "85%", backgroundColor: theme.colors.surface, borderRadius: 16, padding: 20, shadowColor: theme.shadows.soft.shadowColor, shadowOpacity: 0.3, shadowRadius: 10 },
   feedbackText: { fontSize: 20, fontWeight: "bold", marginBottom: 10, textAlign: "center" },
-  explanationText: { color: "#ddd", fontSize: 15, textAlign: "center", marginBottom: 10 },
-  linkText: { color: "#a78bfa", fontSize: 15, textAlign: "center", textDecorationLine: "underline" },
-  footer: { marginTop: 25, color: "#ccc", fontSize: 16 },
+  explanationText: { color: theme.colors.textSecondary, fontSize: 15, textAlign: "center", marginBottom: 10 },
+  linkText: { color: theme.colors.accentSecondary, fontSize: 15, textAlign: "center", textDecorationLine: "underline" },
+  footer: { marginTop: 25, color: theme.colors.textSecondary, fontSize: 16 },
 });

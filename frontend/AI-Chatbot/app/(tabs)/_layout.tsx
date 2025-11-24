@@ -68,9 +68,9 @@ export default function TabLayout() {
                 </NativeTabs.Trigger>
 
                 {/* REMOVE IN PRODUCTION */}
-                <NativeTabs.Trigger name='components'>
+                {/* <NativeTabs.Trigger name='components'>
                     <Label>Components</Label>
-                </NativeTabs.Trigger>
+                </NativeTabs.Trigger> */}
 
             </NativeTabs>
         </>
