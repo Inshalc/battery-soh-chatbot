@@ -2,16 +2,22 @@
   "expo": {
     "name": "AI-Chatbot",
     "slug": "AI-Chatbot",
+    "owner": "zainny14",
+    "scheme": "aichatbot",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "aichatbot",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.zainny14.aichatbot",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
+      "package": "com.zainny14.aichatbot",
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
         "foregroundImage": "./assets/images/android-icon-foreground.png",
@@ -44,6 +50,15 @@
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "d4abdbec-0002-47c1-a218-db1181c8de32"
+      },
+      "webClientId": "479594544895-m9sfank3ajdslui02jrmud7kj1vt24q2.apps.googleusercontent.com",
+      "iosClientId": "479594544895-ppoehqeh804ok2kf4hu4j5qnlshlegh0.apps.googleusercontent.com",
+      "androidClientId": "479594544895-3mljc4hvjbo113l3fmna0b3r1c59a8i9.apps.googleusercontent.com"
     }
   }
 }
