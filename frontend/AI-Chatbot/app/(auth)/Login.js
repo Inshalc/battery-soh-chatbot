@@ -68,7 +68,7 @@ export default function Login() {
     setLoading(true);
     setTimeout(() => {
       setLoading(false);
-      Alert.alert("Success", `Logged in as ${email}`);
+      // Alert.alert("Success", `Logged in as ${email}`);
     //   setScreen("game1");
     router.replace('/(tabs)');
     }, 1000);

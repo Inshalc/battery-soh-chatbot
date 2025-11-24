@@ -7,6 +7,7 @@ import IconButton from '../ui/IconButton';
 import PropTypes from 'prop-types';
 import { useRouter } from 'expo-router';
 import { BlurView } from 'expo-blur';
+import { Alert } from 'react-native';
 // import { SafeAreaView } from 'react-native-safe-area-context';
 
 const Header = ({ title = '[Text]', onHeightChange }) => {
@@ -49,16 +50,19 @@ const Header = ({ title = '[Text]', onHeightChange }) => {
                         name="person"
                         bgColor="transparent"
                         size={theme.fontSize.lg}
-                        handlePress={() => {
+                        onPress={() => {
                             router.push('/(tabs)/settings');
+                            // console.log('pressed');
+                            // Alert.alert("LOG", "HEDER MOUNTED");
                         }}
                     />
                     <IconButton
                         name="log-out"
                         bgColor="transparent"
                         size={theme.fontSize.lg}
-                        handlePress={() => {
-                            router.push('/landing');
+                        onPress={() => {
+                            router.replace('/(auth)/Login');
+                            // console.log('pressed');
                         }}
                     />
                 </View>
