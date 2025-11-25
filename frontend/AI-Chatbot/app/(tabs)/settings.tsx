@@ -1,15 +1,31 @@
 import { Text, View } from "react-native";
+import React, { useState } from 'react';
+import Screen from "@/components/layout/Screen";
+import { ScrollView } from "react-native";
+import { theme } from "@/themes/theme";
+import GreetingCard from "@/components/ui/GreetingCard";
 
 export default function Settings() {
+  // fro header height padding
+  const [headerHeight, setHeaderHeight] = useState(0);
+
   return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <Text>Edit app/(tabs)/settings.tsx to edit this screen.</Text>
-    </View>
+    <Screen>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+
+        contentContainerStyle={
+          [
+            {paddingTop: headerHeight + theme.spacing.lg},
+            {paddingBottom: theme.spacing.lg},
+            {gap: theme.spacing.lg}
+          ]
+        }
+      >
+
+        <GreetingCard greeting="Hi!" description="This is the setting page, where you can change any settings you want" />
+
+      </ScrollView>
+    </Screen>
   );
 }

@@ -18,6 +18,14 @@ export const globalStyles = StyleSheet.create({
     ...theme.shadows.soft,
   },
 
+  chip: {
+    backgroundColor: theme.colors.accent,
+    paddingHorizontal: theme.spacing.sm,
+    paddingVertical: theme.spacing.xs,
+    borderRadius: theme.borderRadius.full,
+    alignSelf: 'flex-start', // make it only take as much space as needed
+  },
+
   glassCard: {
     backgroundColor: 'rgba(255,255,255,0.06)',
     borderRadius: theme.borderRadius.md,

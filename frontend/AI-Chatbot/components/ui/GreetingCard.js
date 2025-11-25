@@ -3,12 +3,15 @@ import { theme } from '@/themes/theme';
 import { PropTypes } from 'prop-types';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import { BlurView } from 'expo-blur';
 
-const GreetingCard = ({name = '[Name]'}) => {
+const GreetingCard = ({greeting = 'Placeholder', description = 'placeholder'}) => {
     return (
         <View style={[globalStyles.card, styles.container]}>
-            <Text style={globalStyles.title}>Welcome {name}! </Text>
-            <Text style={[globalStyles.textSecondary, styles.subtext]}>This is the homepage, view information about your output below!</Text>
+            <BlurView intensity={10} style={StyleSheet.absoluteFill} />
+
+            <Text style={globalStyles.title}>{greeting}</Text>
+            <Text style={[globalStyles.textSecondary, styles.subtext]}>{description}</Text>
         </View>
     );
 };
@@ -26,6 +29,10 @@ const styles = StyleSheet.create({
         display: 'flex',
         flexDirection: 'column',
         gap: theme.spacing.md,
+
+        backgroundColor: 'transparent',
+
+        overflow: 'hidden',
     },
 });
 
