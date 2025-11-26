@@ -1,3 +1,4 @@
+// backend/index.js
 const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
@@ -8,8 +9,9 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-// Middleware
+// Allow all origins in development (safe for your project)
 app.use(cors());
+
 app.use(express.json());
 
 // Routes
@@ -29,12 +31,13 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-// Start server
-app.listen(PORT, () => {
+// Start server - listen on all network interfaces
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`🚀 Server running on port ${PORT}`);
   console.log(`📊 Health check: http://localhost:${PORT}/api/health`);
   console.log(`🔋 Battery API: http://localhost:${PORT}/api/battery`);
   console.log(`💬 Chat API: http://localhost:${PORT}/api/chat`);
+  console.log(`📱 Accessible from other devices on your network!`);
 });
 
 module.exports = app;

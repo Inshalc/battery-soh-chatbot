@@ -1,133 +1,135 @@
+// backend/routes/chat.js
 const express = require('express');
 const router = express.Router();
+const geminiService = require('../services/geminiService');
 
-// Helper function for battery health advice
+// Enhanced smart responses (backup)
+const smartResponses = {
+    greeting: `🔋 **Battery Health Assistant - Powered by Gemini AI**\n\nHello! I'm your AI-powered battery expert using Google's Gemini 2.0 Flash model. I can help you:\n\n• **Analyze battery health** using our ML system (21 cell voltages → SOH prediction)\n• **Provide maintenance recommendations** for optimal performance\n• **Explain battery recycling** processes and importance\n• **Optimize battery lifespan** with best practices\n• **Answer technical questions** about battery technology\n\nWhat would you like to know about batteries today?`,
+
+    battery_health: `**🔬 Battery Health Analysis System**\n\nOur advanced system uses **machine learning** to predict battery State of Health:\n\n📊 **ML Pipeline:**\n- **Input:** 21 cell voltage measurements (U1-U21)\n- **Processing:** Statistical feature aggregation (mean, median, std, min, max, skew)\n- **Model:** Linear Regression trained on battery data\n- **Output:** Accurate SOH prediction with health classification\n\n🎯 **Health Classification:**\n- 🟢 **80-100%:** Excellent condition (like-new performance)\n- 🟡 **60-80%:** Good condition (normal aging, monitor regularly)\n- 🟠 **40-60%:** Fair condition (significant degradation)\n- 🔴 **<40%:** Poor condition (replace soon)\n\n💡 **Industry Standard:** 60% threshold ensures reliable operation in most applications.`,
+
+    lithium: `**⚡ Lithium-Ion Battery Technology**\n\n🔋 **Technical Specifications:**\n- **Energy Density:** 150-250 Wh/kg (high efficiency)\n- **Cycle Life:** 300-500+ charge cycles\n- **Self-Discharge:** ~5% per month (low loss)\n- **Voltage Range:** 3.0V - 4.2V per cell\n- **Memory Effect:** None (unlike older technologies)\n\n🚀 **Advanced Features:**\n- Rapid charging capabilities\n- High power density for demanding applications\n- Excellent temperature performance range\n- Advanced Battery Management Systems (BMS)\n\n🛡️ **Safety Systems:**\n- Thermal runaway protection\n- Overcharge/over-discharge prevention\n- Cell balancing technology\n- State of Health monitoring\n\nOur ML system specifically analyzes lithium-ion battery packs using 21 cell voltage measurements.`,
+
+    maintenance: `**🛠️ Battery Maintenance Excellence**\n\n📈 **Proactive Maintenance Strategy:**\n\n🔋 **Daily Operational Practices:**\n- Maintain 20-80% charge for daily cycling\n- Avoid temperature extremes (>35°C or <0°C)\n- Use manufacturer-certified charging equipment\n- Prevent physical stress and impacts\n\n⚡ **Charging Optimization:**\n- Implement partial charging cycles (20-80%)\n- Avoid continuous 0-100% deep cycles\n- Utilize smart charging algorithms\n- Monitor charging temperature\n\n📦 **Storage Protocols:**\n- Store at 40-60% state of charge\n- Maintain 15-25°C storage temperature\n- Conduct quarterly charge maintenance\n- Use climate-controlled environments\n\n🔍 **Monitoring & Analytics:**\n- Regular SOH analysis using our ML system\n- Track performance degradation trends\n- Monitor cell voltage balance\n- Predictive maintenance scheduling`,
+
+    recycling: `**🌱 Battery Recycling & Circular Economy**\n\n♻️ **Environmental Imperative:**\n- **Material Recovery:** 95%+ of lithium, cobalt, nickel\n- **Pollution Prevention:** Zero landfill contamination\n- **Resource Conservation:** Reduced mining requirements\n- **Carbon Reduction:** Lower lifecycle emissions\n\n🔬 **Advanced Recycling Process:**\n1. **Collection & Sorting:** Chemical identification\n2. **Safe Discharge:** Energy recovery systems\n3. **Mechanical Processing:** Shredding and separation\n4. **Hydrometallurgical Treatment:** Material purification\n5. **Manufacturing Ready:** High-purity materials\n\n📊 **Sustainability Impact:**\n- 70% reduction in water usage vs. mining\n- 40% lower energy consumption\n- 85% reduction in greenhouse gases\n- Complete heavy metal containment\n\n📍 **Responsible Disposal:** Certified recycling centers only - never municipal waste!`,
+
+    analysis: `**🔍 Battery Health Analysis Available**\n\n🎯 **Ready to analyze your battery health?**\n\nOur machine learning system provides comprehensive battery assessment:\n\n📋 **Required Input:**\n- 21 cell voltage measurements (U1-U21)\n- Voltage range: 2.5V - 4.5V per cell\n- Typical operating conditions data\n\n🔧 **Analysis Process:**\n1. Input cell voltages via "Analyze Battery"\n2. Automated statistical feature calculation\n3. Linear Regression ML model processing\n4. SOH prediction and classification\n5. Detailed health report generation\n\n📊 **Results Include:**\n- **State of Health percentage** (primary metric)\n- **Health status classification** (Healthy/Attention)\n- **Maintenance recommendations** (actionable insights)\n- **Performance predictions** (remaining lifespan)\n\n🚀 **Get started with the Analyze Battery feature above!**`
+};
+
+// Helper function
 function getBatteryHealthAdvice(soh) {
-    if (soh >= 0.8) {
-        return "Your battery is in excellent condition! Continue with regular maintenance practices.";
-    } else if (soh >= 0.6) {
-        return "Your battery is in good condition but showing some aging. Monitor regularly and maintain good charging habits.";
-    } else {
-        return "Your battery requires attention. Consider replacement soon and avoid demanding applications.";
-    }
+    if (soh >= 0.8) return "🎉 **Excellent Condition!** Your battery performs like new. Continue current maintenance practices for optimal longevity.";
+    if (soh >= 0.6) return "✅ **Good Condition!** Your battery shows normal aging patterns. Maintain consistent charging habits and monitor regularly.";
+    return "⚠️ **Attention Required!** Significant degradation detected. Consider replacement planning and avoid high-demand applications.";
 }
 
-// Comprehensive battery knowledge base
-function getBatteryResponse(message) {
-    const lowerMessage = message.toLowerCase();
-    
-    const knowledgeBase = {
-        'state of health': 'State of Health (SOH) measures a battery\'s current condition compared to its original state. It indicates capacity retention - a 100% SOH means like-new performance, while lower values show degradation. SOH considers factors like capacity loss, internal resistance, and charge retention ability.',
-        
-        'what is soh': 'SOH stands for State of Health. It\'s a percentage representing a battery\'s current capacity relative to its original capacity. For example, 80% SOH means the battery holds 80% of its original charge capacity. This is different from State of Charge (SOC) which shows current charge level.',
-        
-        'how to keep a battery healthy': 'To maintain battery health:\n• Avoid extreme temperatures (both hot and cold)\n• Prevent deep discharges - keep between 20-80% charge\n• Use manufacturer-approved chargers\n• Store at 40-60% charge for long periods\n• Avoid frequent fast charging\n• Perform regular calibration cycles',
-        
-        'why is recycling batteries important': 'Battery recycling is crucial because:\n• Prevents hazardous materials from polluting environment\n• Conserves valuable resources (lithium, cobalt, nickel)\n• Reduces need for new mining operations\n• Supports circular economy for battery materials\n• Reduces greenhouse gas emissions from production',
-        
-        'how to extend battery lifespan': 'Extend battery life by:\n• Avoid frequent full discharges\n• Keep charge between 20-80%\n• Minimize heat exposure\n• Use smart charging practices\n• Store properly when not in use\n• Avoid overcharging\n• Use compatible charging equipment',
-        
-        'battery maintenance tips': 'Essential battery maintenance:\n• Keep terminals clean and corrosion-free\n• Avoid physical damage\n• Store in cool, dry places\n• Use voltage stabilizers if needed\n• Perform regular capacity tests\n• Follow manufacturer guidelines\n• Monitor for swelling or damage',
-        
-        'recycling batteries': 'Battery recycling process:\n1. Collection and sorting by chemistry type\n2. Safe discharge and dismantling\n3. Material recovery (metals, plastics)\n4. Purification of recovered materials\n5. Manufacturing new products\n• Recycling rates vary by battery type\n• Proper disposal prevents environmental harm',
-        
-        'what is battery soh': 'Battery State of Health (SOH) is a key metric that indicates:\n• Remaining capacity compared to original\n• Overall battery condition and aging\n• Prediction of remaining useful life\n• SOH < 60% often indicates need for replacement\n• Regular SOH monitoring helps optimize battery usage',
-        
-        'soh threshold': 'The 60% SOH threshold is commonly used because:\n• Below 60%, batteries often can\'t provide required power\n• Significant capacity loss affects performance\n• Increased risk of sudden failure\n• Many applications require minimum 60% SOH for reliable operation\n• This threshold can be adjusted based on specific use cases'
-    };
-    
-    // Find the best matching response
-    for (const [key, response] of Object.entries(knowledgeBase)) {
-        if (lowerMessage.includes(key)) {
-            return response;
-        }
-    }
-    
-    // Default battery response
-    return "I specialize in battery technology! I can help with:\n• State of Health (SOH) explanations\n• Battery maintenance and best practices\n• Recycling information and importance\n• Lifespan extension advice\n• General battery technology questions\n\nWhat specific aspect would you like to know about?";
-}
-
-/**
- * Chat with battery assistant
- * POST /api/chat/message
- * Body: { message: string, batterySOH?: number }
- */
 router.post('/message', async (req, res) => {
     try {
         const { message, batterySOH } = req.body;
 
         if (!message || typeof message !== 'string') {
-            return res.status(400).json({
-                error: 'Message is required and must be a string'
-            });
+            return res.status(400).json({ error: 'Message is required' });
         }
 
-        const lowerMessage = message.toLowerCase();
+        const lowerMessage = message.toLowerCase().trim();
+        console.log('💬 Received:', message, 'SOH:', batterySOH);
 
-        // Check if it's a CURRENT battery status query (needs SOH data)
-        const isCurrentStatusQuery = 
-            lowerMessage.includes('check') || 
-            lowerMessage.includes('status') ||
-            lowerMessage.includes('my battery') ||
-            lowerMessage.match(/how is.*battery/) ||
-            lowerMessage.match(/battery.*status/) ||
-            (lowerMessage.includes('health') && lowerMessage.includes('my'));
-
-        // Handle CURRENT battery status queries
-        if (isCurrentStatusQuery) {
+        // Battery health status check
+        if ((lowerMessage.includes('check') || lowerMessage.includes('status') || lowerMessage.includes('health')) && 
+            (lowerMessage.includes('battery') || lowerMessage.includes('soh'))) {
+            
             if (batterySOH !== undefined && batterySOH !== null) {
                 const status = batterySOH >= 0.6 ? 'healthy' : 'has a problem';
-                const healthMessage = `The battery State of Health (SOH) is ${(batterySOH * 100).toFixed(1)}%. Based on the threshold of 60%, the battery ${status}.`;
-                const advice = getBatteryHealthAdvice(batterySOH);
+                const statusIcon = batterySOH >= 0.6 ? '🟢' : '🔴';
+                const report = `🔋 **Battery Health Analysis Report**\n\n${statusIcon} **State of Health:** ${(batterySOH * 100).toFixed(1)}%\n📊 **Status:** ${status}\n⚡ **Classification:** ${batterySOH >= 0.6 ? 'Operational - Healthy' : 'Degraded - Attention Required'}\n🎯 **Threshold:** 60% (industry standard)\n🤖 **ML Model:** Linear Regression\n📈 **Input Features:** 21 cell voltages → 6 statistical aggregates`;
                 
                 return res.json({
-                    response: `${healthMessage} ${advice}`,
+                    response: `${report}\n\n${getBatteryHealthAdvice(batterySOH)}`,
                     type: 'health_status',
                     soh: batterySOH,
-                    isHealthy: batterySOH >= 0.6,
-                    advice: advice
+                    isHealthy: batterySOH >= 0.6
                 });
             } else {
                 return res.json({
-                    response: "I can check battery health status, but I need the current State of Health (SOH) value. Please provide the battery SOH or run a prediction first.",
-                    type: 'health_request'
+                    response: smartResponses.analysis,
+                    type: 'analysis_guide'
                 });
             }
         }
 
-        // For all other battery-related questions, use our knowledge base
-        const isBatteryQuestion = 
-            lowerMessage.includes('battery') || 
-            lowerMessage.includes('soh') ||
-            lowerMessage.includes('lithium') ||
-            lowerMessage.includes('charge') ||
-            lowerMessage.includes('recycl') ||
-            lowerMessage.includes('health') ||
-            lowerMessage.includes('maintain') ||
-            lowerMessage.includes('extend') ||
-            lowerMessage.includes('lifespan');
-
-        if (isBatteryQuestion) {
-            const batteryResponse = getBatteryResponse(message);
+        // Use Gemini AI for all responses
+        let geminiUsed = false;
+        try {
+            console.log('🚀 Using Gemini AI...');
+            const geminiResponse = await geminiService.getResponse(message);
+            geminiUsed = true;
+            
             return res.json({
-                response: batteryResponse,
-                type: 'battery_info'
+                response: geminiResponse,
+                type: 'gemini_ai_response',
+                soh: batterySOH,
+                ai_model: 'Gemini 2.0 Flash'
             });
+        } catch (geminiError) {
+            console.log('🔄 Gemini unavailable, using enhanced knowledge base');
         }
 
-        // For non-battery questions
-        const focusedResponse = "I'm specialized in battery technology and health. I can help you with questions about battery State of Health (SOH), maintenance, recycling, or extending battery lifespan. What would you like to know about batteries?";
+        // Enhanced fallback responses
+        let response = smartResponses.greeting;
         
-        res.json({
-            response: focusedResponse,
-            type: 'general_guidance'
+        if (lowerMessage.includes('hello') || lowerMessage.includes('hi') || lowerMessage.includes('hey')) {
+            response = smartResponses.greeting;
+        } else if (lowerMessage.includes('lithium') || lowerMessage.includes('li-ion')) {
+            response = smartResponses.lithium;
+        } else if (lowerMessage.includes('soh') || lowerMessage.includes('state of health') || lowerMessage.includes('battery health')) {
+            response = smartResponses.battery_health;
+        } else if (lowerMessage.includes('maintain') || lowerMessage.includes('care') || lowerMessage.includes('tip')) {
+            response = smartResponses.maintenance;
+        } else if (lowerMessage.includes('recycl') || lowerMessage.includes('environment') || lowerMessage.includes('sustain')) {
+            response = smartResponses.recycling;
+        } else if (lowerMessage.includes('analyze') || lowerMessage.includes('predict') || lowerMessage.includes('test')) {
+            response = smartResponses.analysis;
+        } else if (lowerMessage.includes('what can you do') || lowerMessage.includes('help')) {
+            response = smartResponses.greeting;
+        }
+
+        return res.json({
+            response: response,
+            type: geminiUsed ? 'gemini_ai_response' : 'enhanced_knowledge_base',
+            soh: batterySOH,
+            ai_model: geminiUsed ? 'Gemini 2.0 Flash' : 'Enhanced Knowledge Base'
         });
 
     } catch (error) {
-        console.error('Chat route error:', error);
-        res.status(500).json({
-            error: 'Chat service unavailable',
-            details: error.message
+        console.error('💥 Chat route error:', error);
+        res.status(500).json({ 
+            error: 'Chat service temporarily unavailable',
+            details: error.message 
+        });
+    }
+});
+
+// Test endpoint
+router.get('/test-gemini', async (req, res) => {
+    try {
+        const testResult = await geminiService.testConnection();
+        res.json({
+            ...testResult,
+            note: 'Using Gemini 2.0 Flash model from available models list'
+        });
+    } catch (error) {
+        res.json({ 
+            success: false, 
+            error: error.message,
+            available_models: [
+                'gemini-2.5-flash',
+                'gemini-2.5-pro', 
+                'gemini-2.0-flash',
+                'gemini-2.0-flash-001',
+                'gemini-2.0-flash-lite'
+            ]
         });
     }
 });

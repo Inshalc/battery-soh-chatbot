@@ -6,7 +6,14 @@ import React from 'react';
 import { Animated, Pressable, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 
-const IconButton = ({borderColor = 'null', bgColor = theme.colors.accent, name = "image-outline", size, iconColor = theme.colors.textPrimary}) => {
+const IconButton = ({
+        borderColor = null, 
+        bgColor = theme.colors.accent, 
+        name = "image-outline", 
+        size, 
+        iconColor = theme.colors.textPrimary, 
+        onPress = null
+    }) => {
 
     const { scale, onPressIn, onPressOut } = createScaleAnimation();
 
@@ -15,6 +22,7 @@ const IconButton = ({borderColor = 'null', bgColor = theme.colors.accent, name =
             <Pressable 
                 onPressIn={onPressIn}
                 onPressOut={onPressOut}
+                onPress={onPress}
 
                 style={[
                     globalStyles.button, 
@@ -38,7 +46,8 @@ IconButton.propTypes = {
     bgColor: PropTypes.string,
     name: PropTypes.string.isRequired,
     size: PropTypes.number.isRequired,
-    color: PropTypes.string,
+    iconColor: PropTypes.string,
+    onPress: PropTypes.func,
 }
 
 const styles = StyleSheet.create({
