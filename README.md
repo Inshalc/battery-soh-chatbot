@@ -1,4 +1,4 @@
-arkdown
+
 # Battery SOH Prediction Model
 
 This project builds and trains a Linear Regression model to predict Battery State of Health (SOH) using voltage-related features derived from pack data. It forms the foundation for a Battery Health Chatbot that can interpret battery condition through machine learning insights.
@@ -265,6 +265,7 @@ npx expo start
 This project was developed for **SOFE3370 Final Project** demonstrating practical applications of machine learning in battery sustainability and health monitoring.
 
 **Built with:** Python, scikit-learn, Node.js, React Native, Expo, and Gemini AI
+
 
 
 
