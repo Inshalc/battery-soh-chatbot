@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import Game1 from '@/components/games/Game1';
-import Game2 from '@/components/games/Game2';
-import Screen from '@/components/layout/Screen';
-import { theme } from '@/themes/theme';
-import { globalStyles } from '@/themes/globalStyles';
+import Game1 from '../../components/games/Game1';
+import Game2 from '../../components/games/Game2';
+import Screen from '../../components/layout/Screen';
+import { theme } from '../../themes/theme';
+import { globalStyles } from '../../themes/globalStyles';
 
 export default function GamesScreen() {
     const [screen, setScreen] = useState<'menu' | 'game1' | 'game2'>('menu');

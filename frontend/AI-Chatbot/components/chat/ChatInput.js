@@ -1,12 +1,19 @@
 import { theme } from "@/themes/theme";
+import { globalStyles } from "@/themes/globalStyles";
 import PropTypes from "prop-types";
 import React, { useState, useEffect} from 'react';
-import { StyleSheet, TextInput, View } from 'react-native';
+import { StyleSheet, TextInput, View, TouchableOpacity, Text } from 'react-native';
 import IconButton from '../ui/IconButton';
 import * as DocumentPicker from 'expo-document-picker';
 import { BlurView } from 'expo-blur';
 
-const ChatInput = ({ placeholder = 'Placeholder', onSend, onPick, preLoadedInput }) => {
+const ChatInput = ({ 
+    placeholder = 'Placeholder', 
+    onSend, 
+    onPick, 
+    preLoadedInput, 
+    analyzeFunction,
+}) => {
     const [message, setMessage] = useState(preLoadedInput || '');
 
     useEffect(() => {
@@ -45,32 +52,49 @@ const ChatInput = ({ placeholder = 'Placeholder', onSend, onPick, preLoadedInput
     }
 
     return (
-        <View style={styles.container}>
-            <IconButton 
+        <View style={[
+            globalStyles.card,
+            styles.container,
+        ]}>
+            {/* <IconButton 
                 borderColor={theme.colors.accentSecondary} 
                 name="folder" 
                 bgColor={theme.colors.surface} 
                 size={theme.fontSize.md}
                 onPress={handlePick}
-            />
-            <View style={styles.inputWrapper}>
-                <BlurView intensity={20} style={StyleSheet.absoluteFill} pointerEvents="none"/>
-                <TextInput 
-                    placeholderTextColor={theme.colors.textSecondary} 
-                    placeholder={placeholder} 
-                    style={styles.input}
+            /> */}
 
-                    value={message}
-                    onChangeText={setMessage}
-                    onSubmitEditing={handleSend}
+            <BlurView intensity={20} style={StyleSheet.absoluteFill} pointerEvents="none"/>
+
+            {/* Analyze Button */}
+            <TouchableOpacity 
+              style={[
+                globalStyles.button,
+                styles.analyzeButton,
+              ]}
+              onPress={analyzeFunction}
+            >
+                <Text style={styles.analyzeButtonText}>⚡️ Analyze Battery Data</Text>
+            </TouchableOpacity>
+            <View style={styles.lowerWrapper}>
+                <View style={styles.inputWrapper}>
+                    <TextInput 
+                        placeholderTextColor={theme.colors.textSecondary} 
+                        placeholder={placeholder} 
+                        style={styles.input}
+
+                        value={message}
+                        onChangeText={setMessage}
+                        onSubmitEditing={handleSend}
+                    />
+                </View>
+                <IconButton 
+                    name="send" 
+                    bgColor={theme.colors.accent} 
+                    size={theme.fontSize.md}
+                    onPress={handleSend}
                 />
             </View>
-            <IconButton 
-                name="send" 
-                bgColor={theme.colors.accent} 
-                size={theme.fontSize.md}
-                onPress={handleSend}
-            />
         </View>
     );
 };
@@ -83,10 +107,20 @@ ChatInput.propTypes = {
 
 const styles = StyleSheet.create({
     container: {
-        flexDirection: 'row',
+        flexDirection: 'column',
         display: 'flex',
         alignItems: 'center',
         gap: theme.spacing.sm,
+
+        backgroundColor: 'transparent',
+
+        // get rid of shadow from globalStyles
+        shadowColor: 'transparent',
+        shadowOpacity: 0,
+        shadowRadius: 0,
+        elevation: 0, // Android
+
+        overflow: 'hidden',
     },
 
     inputWrapper: {
@@ -118,7 +152,29 @@ const styles = StyleSheet.create({
     fileButton: {
         borderWidth: 1,
         borderColor: theme.colors.accentSecondary,
-    }
+    },
+
+    analyzeButton: {
+        backgroundColor: theme.colors.accent,
+        borderRadius: theme.borderRadius.lg,
+        alignItems: 'center',
+
+        width: '100%',
+
+        borderRadius: theme.borderRadius.full,
+    },
+
+    analyzeButtonText: {
+        color: theme.colors.textPrimary,
+        fontSize: theme.fontSize.md,
+        fontWeight: '600',
+    },
+
+    lowerWrapper: {
+        flexDirection: 'row',
+        gap: theme.spacing.sm,
+        alignItems: 'center',
+    },  
 });
 
 export default ChatInput;
