@@ -6,6 +6,8 @@ This project builds and trains a Linear Regression model to predict Battery Stat
 ---
 
 ## File Structure
+```text
+
 battery-soh-chatbot/
 │
 ├── backend/
@@ -74,8 +76,7 @@ battery-soh-chatbot/
 │
 └── README.md
 
-text
-
+```
 ---
 
 ## Setup Instructions
@@ -253,3 +254,4 @@ text
 This project was developed for **SOFE3370 Final Project** demonstrating practical applications of machine learning in battery sustainability and health monitoring.
 
 **Built with:** Python, scikit-learn, Node.js, React Native, Expo, and Gemini AI
+
