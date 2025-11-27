@@ -24,6 +24,7 @@ export default function Settings() {
       >
 
         <GreetingCard greeting="Hi!" description="This is the setting page, where you can change any settings you want" />
+        <GreetingCard greeting="App Information" description={"Version: 1.0.0\nBuild: 14"} />
 
       </ScrollView>
     </Screen>

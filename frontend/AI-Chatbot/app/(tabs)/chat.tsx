@@ -95,10 +95,10 @@ export default function Chat() {
   };
 
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <StatusBar barStyle="light-content" backgroundColor={theme.colors.surface} />
+    // <SafeAreaView style={styles.safeArea}>
+    //   <StatusBar barStyle="light-content" backgroundColor={theme.colors.surface} />
       
-      <Screen style={styles.screen}>
+      <Screen>
         <KeyboardAvoidingView
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
           style={styles.kav}
@@ -110,7 +110,7 @@ export default function Chat() {
           </View>
 
           {/* Input Area - Fixed at bottom */}
-          <View style={[styles.inputArea, { paddingBottom: insets.bottom }]}>
+          <View style={[styles.inputArea, { paddingBottom: insets.bottom + theme.spacing.sm }]}>
             
             {/* Battery SOH Status */}
             {currentBatterySOH && (
@@ -122,26 +122,18 @@ export default function Chat() {
               </View>
             )}
 
-            {/* Analyze Button */}
-            <TouchableOpacity 
-              style={styles.analyzeButton}
-              onPress={() => setShowBatteryModal(true)}
-            >
-              <Text style={styles.analyzeButtonText}>🔋 Analyze Battery Data</Text>
-            </TouchableOpacity>
-
             {/* Chat Input */}
-            <View style={styles.chatInputContainer}>
-              <ChatInput 
-                placeholder='Ask about batteries or type "check health"...'
-                preLoadedInput={prefill}
-                onSend={handleSendMessage}
-                onPick={(file: { name?: string }) => {
-                  Alert.alert('File Selected', `Analyze battery data from ${file.name}?`);
-                }}
-                disabled={isProcessing}
-              />
-            </View>
+            <ChatInput 
+              placeholder='Ask about batteries or type "check health"...'
+              preLoadedInput={prefill}
+              onSend={handleSendMessage}
+              onPick={(file: { name?: string }) => {
+                Alert.alert('File Selected', `Analyze battery data from ${file.name}?`);
+              }}
+              disabled={isProcessing}
+
+              analyzeFunction={() => setShowBatteryModal(true)}
+            />
 
             {/* Processing Indicator */}
             {isProcessing && (
@@ -164,7 +156,7 @@ export default function Chat() {
           />
         </Modal>
       </Screen>
-    </SafeAreaView>
+    // </SafeAreaView>
   );
 }
 
@@ -173,24 +165,23 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: theme.colors.background,
   },
-  screen: {
-    flex: 1,
-    backgroundColor: theme.colors.background,
-  },
+  // screen: {
+  //   flex: 1,
+  //   backgroundColor: theme.colors.background,
+  // },
   kav: {
     flex: 1,
   },
   messageArea: {
     flex: 1,
-    paddingHorizontal: 16,
+    // paddingHorizontal: 16,
   },
   inputArea: {
-    backgroundColor: theme.colors.surface,
-    borderTopWidth: 1,
+    backgroundColor: 'transparent',
+    borderTopWidth: 2,
     borderTopColor: theme.colors.border,
-    paddingHorizontal: 16,
-    paddingTop: 12,
-    gap: 8,
+    paddingVertical: theme.spacing.sm,
+    gap: theme.spacing.sm,
   },
   sohBanner: {
     backgroundColor: 'rgba(76, 175, 80, 0.1)',
@@ -204,21 +195,7 @@ const styles = StyleSheet.create({
     fontSize: theme.fontSize.sm,
     fontWeight: '600',
   },
-  analyzeButton: {
-    backgroundColor: theme.colors.accent,
-    paddingVertical: 12,
-    paddingHorizontal: 16,
-    borderRadius: theme.borderRadius.lg,
-    alignItems: 'center',
-  },
-  analyzeButtonText: {
-    color: theme.colors.textPrimary,
-    fontSize: theme.fontSize.md,
-    fontWeight: '600',
-  },
-  chatInputContainer: {
-    // ChatInput has its own styling
-  },
+
   processingContainer: {
     alignItems: 'center',
     paddingVertical: 4,

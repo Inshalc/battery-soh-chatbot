@@ -21,23 +21,39 @@ export default function Index() {
     ];
 
     const cards = [
-        {categoryId: 1, mainText: 'R²: 0.5081', subText: 'Lots of text abt what this value means and how it works yk'},
-        {categoryId: 2, mainText: 'MSE: 0.0021', subText: 'Lots of text abt what this value means and how it works yk'},
-        {categoryId: 3, mainText: 'MAE: 0.0359', subText: 'Lots of text abt what this value means and how it works yk'},
-        {categoryId: 4, mainText: 'Training Time: 0.0033 s', subText: 'Lots of text abt what this value means and how it works yk'},
+        {
+            categoryId: 1,
+            mainText: 'R²: 0.5081',
+            subText: 'This score shows how much of the battery’s behaviour the model can explain. Higher means better prediction accuracy overall.'
+        },
+        {
+            categoryId: 2,
+            mainText: 'MSE: 0.0021',
+            subText: 'Mean Squared Error measures how far predictions are from the true values. Lower values mean the model is making fewer large mistakes.'
+        },
+        {
+            categoryId: 3,
+            mainText: 'MAE: 0.0359',
+            subText: 'Mean Absolute Error tracks the average size of prediction errors. It’s a clean indicator of how much the model is off on each estimate.'
+        },
+        {
+            categoryId: 4,
+            mainText: 'Training Time: 0.0033 s',
+            subText: 'This shows how long the model took to train. Fast training means lighter computation and quicker updates when retraining.'
+        },
     ];
 
     // fro ask ai section, change messages fro messages, change cips for input chips, 
     const messages = [
         {id: 1, isUser: true, text: "What's my Battery SOH?"},
-        {id: 2, isUser: false, text: "idk broski"},
+        {id: 2, isUser: false, text: "Tap here to find out!"},
     ];
 
     const chips = [
-        {id: 1, text: "How are you"},
-        {id: 2, text: "byebye"},
-        {id: 3, text: "byebye"},
-        {id: 4, text: "byebye"},
+        {id: 1, text: "Check Battery SOH"},
+        {id: 2, text: "How to extend battery lifespan?"},
+        {id: 3, text: "Did we get first place?"},
+        // {id: 4, text: "byebye"},
     ];
 
     return (

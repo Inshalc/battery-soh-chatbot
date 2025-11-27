@@ -10,6 +10,7 @@ import {
     NativeTabs
 } from 'expo-router/unstable-native-tabs';
 import React from 'react';
+import { Platform } from 'react-native';
 
 export default function TabLayout() {
     const [headerHeight, setHeaderHeight] = useState(0);
@@ -42,7 +43,10 @@ export default function TabLayout() {
                 iconColor={{ default: theme.colors.textSecondary, selected: theme.colors.accent }}
                 labelStyle={{
                     default: { color: theme.colors.textSecondary },
-                    selected: { color: theme.colors.accent },
+                    selected: { 
+                        color:
+                            Platform.OS === "web" ? theme.colors.textPrimary : theme.colors.accent 
+                    },
                 }}
             >
                 

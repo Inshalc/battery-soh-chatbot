@@ -1,7 +1,7 @@
 // components/layout/Screen.tsx
 import { theme } from '@/themes/theme';
 import React, { ReactNode } from 'react';
-import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
+import { Platform, StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ImageBackground } from 'react-native';
 import { useState } from 'react';
@@ -32,7 +32,9 @@ export default function Screen({ children, padded = true, style}: ScreenProps) {
             styles.body,
             padded && {
               paddingHorizontal: gutterH,
-              paddingTop: headerHeight + insets.top,
+              paddingTop: headerHeight + 
+                          insets.top + 
+                          (Platform.OS === "web" ? theme.spacing.lg * 2.5 : 0),
               paddingBottom: theme.spacing.sm,
             },
             style,
@@ -46,11 +48,19 @@ export default function Screen({ children, padded = true, style}: ScreenProps) {
 }
 
 const styles = StyleSheet.create({
-  root: { flex: 1, backgroundColor: 'transparent' }, // from your theme.colors.background
+  root: { flex: 1, backgroundColor: 'transparent' },
   body: {
     flex: 1,
     width: '100%',
-    maxWidth: 840,        // keeps tablets pretty
-    alignSelf: 'center',  // centers the column within wide screens
+    alignSelf: 'center',
+    ...Platform.select({
+        web: {
+            maxWidth: 800,
+            width: '100%',
+        },
+        default: {
+            maxWidth: '100%',
+        },
+    }),
   },
 });
