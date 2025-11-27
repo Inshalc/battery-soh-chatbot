@@ -80,35 +80,39 @@ battery-soh-chatbot/
 ---
 
 ## Setup Instructions
-```text
-
+[
 ### 1. Clone the repository
+```
+
 git clone https://github.com/Inshalc/battery-soh-chatbot.git
 cd battery-soh-chatbot
 
-```text
+```
 
 
 ### 2. Create and activate a virtual environment
 
 **macOS / Linux**
+```
 python3 -m venv .venv
 source .venv/bin/activate
 
-```text
+```
 
 
 **Windows**
+```
 python -m venv .venv
 .venv\Scripts\activate
 
-```text
+```
 
 
 ### 3. Install dependencies
+```
 pip install -r requirements.txt
 
-```text
+```
 
 
 ---
@@ -259,5 +263,6 @@ text
 This project was developed for **SOFE3370 Final Project** demonstrating practical applications of machine learning in battery sustainability and health monitoring.
 
 **Built with:** Python, scikit-learn, Node.js, React Native, Expo, and Gemini AI
+
 
 
