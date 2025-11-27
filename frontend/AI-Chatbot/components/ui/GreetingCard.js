@@ -18,6 +18,7 @@ const GreetingCard = ({greeting = 'Placeholder', description = 'placeholder'}) =
 
 GreetingCard.propTypes = {
     name: PropTypes.string,
+    description: PropTypes.string,
 }
 
 const styles = StyleSheet.create({
