@@ -108,7 +108,7 @@ export default function Login() {
       <StatusBar barStyle="light-content" backgroundColor={theme.colors.background} />
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <LinearGradient colors={[theme.colors.accent, theme.colors.background]} style={styles.topSection}>
-          <Text style={styles.title}>Welcome Back To Battery Chatbox</Text>
+          <Text style={styles.title}>Welcome Back To Battery Chatbot</Text>
           <Text style={styles.subtitle}>Login to continue</Text>
         </LinearGradient>
 
@@ -174,7 +174,7 @@ const styles = StyleSheet.create({
   scrollContainer: { flexGrow: 1 },
   topSection: { flex: 1, minHeight: 250, justifyContent: "center", alignItems: "center", padding: theme.spacing.lg, borderBottomLeftRadius: theme.borderRadius.lg, borderBottomRightRadius: theme.borderRadius.lg },
   bottomSection: { flex: 2, backgroundColor: theme.colors.background, padding: theme.spacing.lg, justifyContent: "center" },
-  title: { fontSize: 36, fontWeight: "bold", color: theme.colors.textPrimary, marginBottom: 10 },
+  title: { fontSize: 36, fontWeight: "bold", color: theme.colors.textPrimary, marginBottom: 10, textAlign: 'center' },
   subtitle: { fontSize: 16, color: theme.colors.textSecondary },
   inputContainer: { marginBottom: theme.spacing.md, borderRadius: theme.borderRadius.md, overflow: "hidden" },
   input: { backgroundColor: theme.colors.surface, padding: theme.spacing.md, fontSize: theme.fontSize.md, color: theme.colors.textPrimary, borderWidth: 1, borderColor: theme.colors.border },
@@ -185,6 +185,6 @@ const styles = StyleSheet.create({
   divider: { flexDirection: "row", alignItems: "center", marginVertical: theme.spacing.md },
   line: { flex: 1, height: 1, backgroundColor: theme.colors.border },
   orText: { color: theme.colors.textSecondary, marginHorizontal: 10 },
-  googleButton: { backgroundColor: "#fff", padding: theme.spacing.md, borderRadius: theme.borderRadius.md, alignItems: "center" },
-  googleText: { color: theme.colors.textPrimary, fontWeight: "600", fontSize: 16 },
+  googleButton: { backgroundColor: "#F5F5F5", padding: theme.spacing.md, borderRadius: theme.borderRadius.md, alignItems: "center" },
+  googleText: { color: theme.colors.background, fontWeight: "600", fontSize: 16 },
 });

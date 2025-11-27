@@ -85,7 +85,7 @@ export default function Signup({ setScreen }) {
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <LinearGradient colors={[theme.colors.accent, theme.colors.background]} style={styles.topSection}>
           <Text style={styles.title}>Create Account</Text>
-          <Text style={styles.subtitle}>Sign up to start using Battery Chatbox</Text>
+          <Text style={styles.subtitle}>Sign up to start using Battery Chatbot</Text>
         </LinearGradient>
 
         <View style={styles.bottomSection}>
@@ -168,7 +168,7 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: theme.borderRadius.lg,
   },
   bottomSection: { flex: 2, backgroundColor: theme.colors.background, padding: theme.spacing.lg, justifyContent: "center" },
-  title: { fontSize: 36, fontWeight: "bold", color: theme.colors.textPrimary, marginBottom: 10 },
+  title: { fontSize: 36, fontWeight: "bold", color: theme.colors.textPrimary, marginBottom: 10, textAlign: 'center' },
   subtitle: { fontSize: 16, color: theme.colors.textSecondary },
   inputContainer: { marginBottom: theme.spacing.md, borderRadius: theme.borderRadius.md, overflow: "hidden" },
   input: {

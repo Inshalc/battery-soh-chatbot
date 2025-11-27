@@ -174,6 +174,8 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         gap: theme.spacing.sm,
         alignItems: 'center',
+
+        width: '100%',
     },  
 });
 

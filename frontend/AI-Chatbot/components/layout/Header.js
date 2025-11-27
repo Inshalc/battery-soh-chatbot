@@ -1,7 +1,7 @@
 import { globalStyles } from '@/themes/globalStyles';
 import { theme } from '@/themes/theme';
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, Platform } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import IconButton from '../ui/IconButton';
 import PropTypes from 'prop-types';
@@ -18,9 +18,9 @@ const Header = ({ title = '[Text]', onHeightChange }) => {
         <View
             style={[
                 styles.positioningContainer,
-                {
-                    paddingTop: insets.top
-                }
+                Platform.OS === 'web'
+                    ? { paddingTop: theme.spacing.md }   // or 0 if you want it flush
+                    : { paddingTop: insets.top }         // keep safe-area behaviour on mobile
             ]}
 
             onLayout={(event) => {
