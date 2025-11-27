@@ -1,216 +1,255 @@
-# Battery Pack SOH Prediction with AI Chatbot
+arkdown
+# Battery SOH Prediction Model
 
-A comprehensive battery health monitoring system that predicts State of Health (SOH) using machine learning and provides AI-powered battery assistance. This project addresses the challenge of retired battery assessment by combining Linear Regression predictions with Gemini AI chatbot capabilities.
+This project builds and trains a Linear Regression model to predict Battery State of Health (SOH) using voltage-related features derived from pack data. It forms the foundation for a Battery Health Chatbot that can interpret battery condition through machine learning insights.
 
-## Project Overview
+---
 
-This system provides efficient State of Health (SOH) testing for retired batteries, offering a sustainable alternative to traditional costly and time-consuming methods. The PulseBat dataset provides pulse voltage response data across various cells and conditions, enabling accurate SOH predictions.
-
-### Key Features
-- ML-powered SOH prediction using Linear Regression on 21 cell voltages
-- AI chatbot integration with Google Gemini for intelligent battery assistance
-- 60% threshold classification for clear health status reporting
-- Mobile-first interface built with React Native and Expo
-- Real-time analysis with statistical feature aggregation
-
-## System Architecture
-Frontend (React Native + Expo)
-↓
-Backend (Node.js + Express) → Gemini AI API
-↓
-ML Model (Python + Scikit-learn)
+## File Structure
+battery-soh-chatbot/
+│
+├── backend/
+│ ├── routes/
+│ │ ├── battery.js
+│ │ └── chat.js
+│ ├── services/
+│ │ └── geminiService.js
+│ ├── index.js
+│ └── package.json
+│
+├── frontend/
+│ └── AI-Chatbot/
+│ ├── app/
+│ │ ├── (tabs)/
+│ │ │ ├── chat.tsx
+│ │ │ └── index.tsx
+│ │ └── _layout.tsx
+│ ├── components/
+│ │ ├── battery/
+│ │ │ └── BatteryInputForm.js
+│ │ ├── chat/
+│ │ │ ├── ChatBubble.js
+│ │ │ ├── ChatInput.js
+│ │ │ └── MessageList.js
+│ │ └── ui/
+│ ├── services/
+│ │ └── api.js
+│ └── package.json
+│
+├── ml-model/
+│ ├── data/
+│ │ ├── raw_data.csv
+│ │ ├── processed_data.csv
+│ │ ├── processed_data_enhanced.csv
+│ │ ├── processed_sorted_by_voltage.csv
+│ │ └── processed_data.py
+│ │
+│ ├── models/
+│ │ └── model.pkl
+│ │
+│ ├── scalers/
+│ │ └── scaler.pkl
+│ │
+│ ├── plots/
+│ │ └── model_results/
+│ │ ├── error_distribution.png
+│ │ ├── metrics_simple.png
+│ │ ├── pred_vs_actual.png
+│ │ ├── r2_visual.png
+│ │ └── residuals.png
+│ │
+│ ├── results/
+│ │ └── model_metrics.json
+│ │
+│ └── src/
+│ ├── config.py
+│ ├── check_data.py
+│ ├── processed_data.py
+│ ├── train_model.py
+│ ├── train_model_enhanced.py
+│ ├── quick_test.py
+│ ├── test_model_range.py
+│ ├── test_realistic.py
+│ └── visualize_metrics.py
+│
+└── README.md
 
 text
 
-## Core Features
+---
 
-### Battery Health Analysis
-- 21-cell voltage input (U1-U21) from battery packs
-- Statistical feature aggregation (mean, median, std, min, max, skew)
-- Linear Regression ML model for accurate SOH prediction
-- Binary classification using 60% threshold (Healthy/Problem)
+## Setup Instructions
 
-### AI-Powered Chatbot
-- Gemini AI integration for intelligent responses
-- Battery-specific knowledge base with expert information
-- Real-time health status queries based on current SOH data
-- Maintenance and recycling guidance powered by AI
+### 1. Clone the repository
+git clone https://github.com/Inshalc/battery-soh-chatbot.git
+cd battery-soh-chatbot
 
-### Mobile Interface
-- Cross-platform compatibility (iOS/Android via Expo)
-- Intuitive battery data input with example presets
-- Real-time analysis results with clear health indicators
-- Professional chat interface with message history
+text
 
-## Technical Stack
+### 2. Create and activate a virtual environment
 
-### Frontend
-- React Native with Expo for cross-platform development
-- TypeScript for type safety and better developer experience
-- Expo Router for file-based navigation
-- Custom UI components with consistent design system
+**macOS / Linux**
+python3 -m venv .venv
+source .venv/bin/activate
 
-### Backend
-- Node.js with Express.js for robust API server
-- RESTful API design with proper error handling
-- CORS enabled for mobile application access
-- Google Gemini API integration for AI capabilities
+text
+
+**Windows**
+python -m venv .venv
+.venv\Scripts\activate
+
+text
+
+### 3. Install dependencies
+pip install -r requirements.txt
+
+text
+
+---
+
+## ML Model Training Pipeline
+
+### Step 1 – Data Preprocessing
+Run the script that cleans the raw dataset and creates new features:
+python ml-model/src/processed_data.py
+
+text
+
+This will:
+- Remove missing or extreme values
+- Compute voltage-based SOH statistics (mean, std, min, max, skew)
+- Save processed data to `ml-model/data/processed_data.csv`
+- Generate exploratory plots
+
+### Step 2 – Train and Evaluate Model
+python ml-model/src/train_model.py
+
+text
+
+This script:
+1. Loads processed data
+2. Splits into training/testing sets
+3. Scales features using StandardScaler
+4. Trains a Linear Regression model
+5. Saves metrics, model, and evaluation plots
+
+**Example console output:**
+📂 Loading data from ml-model/data/processed_data.csv ...
+✅ Data shape: (670, 36)
+🔀 Splitting into train/test ...
+✅ Train: 536 | Test: 134
+⚙️ Scaling features ...
+🤖 Training Linear Regression model ...
+✅ Model trained in 0.00s
+💾 Metrics saved -> ml-model/results/model_metrics.json
+✅ Training complete! Check ml-model/results/model_metrics.json and ml-model/plots/model_results/
+
+text
+
+### Step 3 – Enhanced Training (Optional)
+For improved model performance with data augmentation:
+python ml-model/src/train_model_enhanced.py
+
+text
+
+### Step 4 – Testing the Model
+Verify the trained model and scaler work properly:
+python ml-model/src/quick_test.py
+
+text
+
+**Example output:**
+Model metrics:
+r2: 0.5081
+mse: 0.0021
+mae: 0.0359
+train_time_s: 0.0033
+
+Example Prediction (SOH): 27.60
+
+text
+
+---
+
+## Backend API Server
+
+### Start the Node.js backend:
+cd backend
+npm install
+npm start
+
+text
+
+**API Endpoints:**
+- `POST /api/battery/predict` - Predict SOH from 21 cell voltages
+- `GET /api/battery/model-info` - Get model information
+- `POST /api/chat/message` - Chat with battery AI assistant
+
+---
+
+## Mobile Frontend
+
+### Start the React Native app:
+cd frontend/AI-Chatbot
+npm install
+npx expo start
+
+text
+
+**Features:**
+- Battery voltage input form (21 cells)
+- Real-time SOH prediction
+- AI chatbot with Gemini integration
+- Health status classification
+
+---
+
+## Model Performance Summary
+
+| Metric | Value | Description |
+|--------|-------|-------------|
+| R² | 0.5081 | 50.8% variance explained |
+| MSE | 0.0021 | Mean Squared Error |
+| MAE | 0.0359 | Mean Absolute Error |
+| Train time | 0.0033 s | Very efficient training |
+
+---
+
+## Key Features
 
 ### Machine Learning
-- Python 3.9 with scikit-learn for model training
 - Linear Regression model for SOH prediction
-- StandardScaler for feature normalization
-- Joblib for model persistence and loading
+- 21-cell voltage aggregation into statistical features
+- 60% threshold classification (Healthy/Unhealthy)
+- Feature scaling and data preprocessing
 
-### AI Integration
-- Google Gemini API (gemini-2.0-flash-001 model)
-- Custom prompt engineering for battery expertise
-- Intelligent fallback system for API failures
+### Full-Stack Integration
+- RESTful API with Node.js/Express
+- React Native mobile interface
+- Real-time predictions
+- Cross-platform compatibility (iOS/Android)
 
-## Project Structure
-battery-soh-chatbot/
-├── backend/ # Node.js Express server
-│ ├── routes/ # API route handlers
-│ │ ├── battery.js # SOH prediction endpoints
-│ │ └── chat.js # Chatbot message handling
-│ ├── services/ # Business logic services
-│ │ └── geminiService.js # Gemini AI integration
-│ ├── index.js # Server entry point
-│ └── package.json # Backend dependencies
-├── frontend/ # React Native Expo application
-│ └── AI-Chatbot/ # Mobile app
-│ ├── app/ # Expo Router file-based routing
-│ │ ├── (tabs)/ # Tab navigation screens
-│ │ │ ├── chat.tsx # Main chat interface
-│ │ │ └── index.tsx # Home screen
-│ │ └── _layout.tsx # Root layout configuration
-│ ├── components/ # Reusable React components
-│ │ ├── battery/ # Battery input and analysis
-│ │ ├── chat/ # Chat interface components
-│ │ └── ui/ # Base UI components
-│ ├── services/ # API service layer
-│ │ └── api.js # Backend communication
-│ ├── themes/ # Design system and styling
-│ └── package.json # Frontend dependencies
-└── ml-model/ # Python machine learning
-├── src/ # Training and inference scripts
-│ ├── train_model.py # Model training script
-│ ├── quick_test.py # Model inference script
-│ └── config.py # Configuration settings
-├── models/ # Saved trained models
-│ └── model.pkl # Linear Regression model
-├── data/ # Training datasets
-├── scalers/ # Feature scalers
-└── results/ # Model performance metrics
+### AI Chatbot
+- Google Gemini integration
+- Battery health status reporting
+- Maintenance and recycling guidance
+- Technical explanations of ML model
 
-text
+---
 
-## Installation & Setup
+## Project Requirements Met
 
-### Prerequisites
-- Node.js 16+ 
-- Python 3.9+
-- Expo CLI
-- Google Gemini API key
+- ✅ Linear Regression model for SOH prediction
+- ✅ 21-cell voltage aggregation (mean, median, std, min, max, skew)
+- ✅ 60% threshold classification system
+- ✅ Chatbot integration with health status reporting
+- ✅ Mobile application with professional UI
+- ✅ Real AI integration with Gemini API
 
-### 1. Backend Setup
+---
 
-```bash
-# Navigate to backend directory
-cd backend
+## Academic Context
 
-# Install dependencies
-npm install
+This project was developed for **SOFE3370 Final Project** demonstrating practical applications of machine learning in battery sustainability and health monitoring.
 
-# Set up environment variables
-cp .env.example .env
-# Add your GEMINI_API_KEY to the .env file
-
-# Start the development server
-npm start
-2. Machine Learning Model
-bash
-# Navigate to ML model directory
-cd ml-model
-
-# Create virtual environment
-python -m venv .venv
-
-# Activate virtual environment
-source .venv/bin/activate  # On Windows: .venv\Scripts\activate
-
-# Install Python dependencies
-pip install -r requirements.txt
-3. Frontend Setup
-bash
-# Navigate to frontend directory
-cd frontend/AI-Chatbot
-
-# Install dependencies
-npm install
-
-# Start Expo development server
-npx expo start
-4. Mobile Testing
-Install Expo Go app on your iOS/Android device
-
-Scan the QR code from the Expo terminal
-
-Ensure your phone and computer are on the same network
-
-Usage Guide
-Battery Analysis Workflow
-Open the application and navigate to the Chat tab
-
-Tap "Analyze Battery" to open the input form
-
-Choose example data:
-
-"Fill Healthy Example" - Shows SOH > 60%
-
-"Fill Unhealthy Example" - Shows SOH < 60%
-
-Analyze to get SOH prediction and health classification
-
-View results with detailed statistical features
-
-AI Chatbot Interaction
-Ask the chatbot questions like:
-
-"Check my battery health" (after analysis)
-
-"How does the ML model work?"
-
-"What is battery State of Health?"
-
-"Battery maintenance best practices"
-
-"Why is battery recycling important?"
-
-Project Requirements Met
-Linear Regression Model - Trained on battery data for SOH prediction
-
-21-cell Voltage Aggregation - Statistical features: mean, median, std, min, max, skew
-
-60% Threshold Classification - Clear healthy/problem classification
-
-Chatbot Integration - Health status reporting and battery knowledge
-
-Gemini AI API - Intelligent responses to general battery questions
-
-Mobile Application - Cross-platform compatibility with Expo
-
-API Documentation
-Battery Endpoints
-POST /api/battery/predict - Predict SOH from 21 cell voltages
-
-GET /api/battery/model-info - Get model information and features
-
-POST /api/battery/health-status - Classify SOH value using threshold
-
-POST /api/battery/test-examples - Test with predefined examples
-
-Chat Endpoints
-POST /api/chat/message - Send message to AI chatbot
-
-GET /api/chat/test-gemini - Test Gemini API connection
+**Built with:** Python, scikit-learn, Node.js, React Native, Expo, and Gemini AI
