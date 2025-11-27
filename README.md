@@ -200,11 +200,13 @@ text
 ## Mobile Frontend
 
 ### Start the React Native app:
+```
 cd frontend/AI-Chatbot
 npm install
 npx expo start
 
-text
+```
+
 
 **Features:**
 - Battery voltage input form (21 cells)
@@ -263,6 +265,7 @@ text
 This project was developed for **SOFE3370 Final Project** demonstrating practical applications of machine learning in battery sustainability and health monitoring.
 
 **Built with:** Python, scikit-learn, Node.js, React Native, Expo, and Gemini AI
+
 
 
 
