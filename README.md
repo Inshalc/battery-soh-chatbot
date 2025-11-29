@@ -80,7 +80,7 @@ battery-soh-chatbot/
 ---
 
 ## Setup Instructions
-[
+
 ### 1. Clone the repository
 ```
 
@@ -259,6 +259,7 @@ npx expo start
 - ✅ Real AI integration with Gemini API
 
 ---
+
 
 
 
