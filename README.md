@@ -260,11 +260,7 @@ npx expo start
 
 ---
 
-## Academic Context
 
-This project was developed for **SOFE3370 Final Project** demonstrating practical applications of machine learning in battery sustainability and health monitoring.
-
-**Built with:** Python, scikit-learn, Node.js, React Native, Expo, and Gemini AI
 
 
 
