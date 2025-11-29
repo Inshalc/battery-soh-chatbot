@@ -177,7 +177,6 @@ train_time_s: 0.0033
 
 Example Prediction (SOH): 27.60
 
-text
 
 ---
 
@@ -249,16 +248,17 @@ npx expo start
 
 ---
 
-## Project Requirements Met
+## Project Overview 
 
-- ✅ Linear Regression model for SOH prediction
-- ✅ 21-cell voltage aggregation (mean, median, std, min, max, skew)
-- ✅ 60% threshold classification system
-- ✅ Chatbot integration with health status reporting
-- ✅ Mobile application with professional UI
-- ✅ Real AI integration with Gemini API
+-  Linear Regression model for SOH prediction
+-  21-cell voltage aggregation (mean, median, std, min, max, skew)
+-  60% threshold classification system
+-  Chatbot integration with health status reporting
+-  Mobile application with professional UI
+-  Real AI integration with Gemini API
 
 ---
+
 
 
 
