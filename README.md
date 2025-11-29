@@ -154,16 +154,12 @@ This script:
 💾 Metrics saved -> ml-model/results/model_metrics.json
 ✅ Training complete! Check ml-model/results/model_metrics.json and ml-model/plots/model_results/
 
-text
 
-### Step 3 – Enhanced Training (Optional)
-For improved model performance with data augmentation:
-python ml-model/src/train_model_enhanced.py
 
-text
 
-### Step 4 – Testing the Model
+### Step 3 – Testing the Model
 Verify the trained model and scaler work properly:
+
 python ml-model/src/quick_test.py
 
 text
@@ -258,6 +254,7 @@ npx expo start
 -  Real AI integration with Gemini API
 
 ---
+
 
 
 
